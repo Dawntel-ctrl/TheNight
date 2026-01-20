@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="TheNight/TheNight.vcxproj" />
+  <Project Path="TheNight/TheNight.vcxproj" Id="eda51a3d-d962-41dc-8904-da84f02c9664" />
 </Solution>
