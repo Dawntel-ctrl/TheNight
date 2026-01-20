@@ -8,7 +8,7 @@ using namespace std;
 
 class AstronomyTracker {
 public:
-    // Enum: meaningful to astronomy hobby (derived from time input)
+    // Enum: excellent for time direction 
     enum NightPhase { EARLY_NIGHT = 1, MID_NIGHT = 2, LATE_NIGHT = 3, DAYTIME = 4 };
 
     // Struct: groups related info for one observation session
@@ -27,9 +27,9 @@ public:
         showBanner();
 
         int choice;
-        do { // do-while loop requirement
+        do { // do while loop show menu and options
             showMenu();
-            choice = getIntInRange("Choose an option (1-5): ", 1, 5);
+            choice = getIntInRange("Choose an option please (1-5): ", 1, 5);
 
             switch (choice) { // menu implemented with switch
             case 1:
@@ -50,17 +50,17 @@ public:
             }
         } while (choice != 5);
     }
-
+    // session count here
 private:
-    static const int MAX_OBS = 7;      // array size
-    Observation obs[MAX_OBS];          // array of structs (stored in class)
+    static const int MAX_OBS = 7;      // set array size
+    Observation obs[MAX_OBS];          // array of structs (they stored in class)
     int count;                         // how many have been filled
 
 private:
-    // ---------------- Banner / Menu ----------------
+    //  menu 
     void showBanner() const {
         cout << "============================================================\n";
-        cout << "            NIGHT SKY OBJECT TRACKER (AMATEUR)\n";
+        cout << "            NIGHT SKY OBJECT TRACKER\n";
         cout << "============================================================\n";
         cout << "Enter DATE, TIME (hour), and LOCATION to log a sky session.\n";
         cout << "Then view a weekly report, get object suggestions, and save.\n";
@@ -77,7 +77,7 @@ private:
         cout << "====================================================\n";
     }
 
-    // ---------------- Add Observation ----------------
+    // add Observation function 
     void addObservation() {
         // Array-based validation: prevent exceeding array size
         if (count >= MAX_OBS) {
@@ -86,7 +86,7 @@ private:
             return;
         }
 
-        Observation o; // local instance (fills requirement: instances declared locally)
+        Observation o; // local instance
 
         o.date = getNonEmptyLine("Enter date (ex: 2026-01-18): ");
         o.hour24 = getIntInRange("Enter time hour (0-23): ", 0, 23);
@@ -98,7 +98,7 @@ private:
 
         cout << "\nSaved observation (" << count << "/" << MAX_OBS << ").\n";
 
-        // Compound if/else block #1 (based ONLY on time + location)
+        // Compound if/else block #1 
         if ((o.hour24 >= 18 && o.hour24 <= 23) && (o.location.length() >= 3)) {
             cout << "Tip: Good evening window for planets and bright stars.\n";
         }
@@ -110,7 +110,7 @@ private:
         }
     }
 
-    // ---------------- Visible Objects ----------------
+    //  Visible Objects for user 
     void showVisibleObjectsMenu() const {
         // Array-based validation: ensure at least one entry exists before showing phase-based objects
         if (count == 0) {
@@ -148,7 +148,7 @@ private:
             break;
         }
 
-        // Compound if/else block #2 (based ONLY on time + phase)
+        // Compound if/else block #2 
         int hr = obs[pick - 1].hour24;
         if ((hr >= 22 && hr <= 23) && (p == MID_NIGHT)) {
             cout << "\nRecommendation: Try fainter targets and star clusters.\n";
@@ -161,7 +161,7 @@ private:
         }
     }
 
-    // Fixed-number for loop requirement: prints exactly 5 items
+    // Fixed number for loop requirement: prints exactly 5 items
     void printFixedObjectList(const string list[], int size) const {
         cout << "Try spotting:\n";
         for (int i = 0; i < size; i++) { // for loop fixed number of times
@@ -169,7 +169,7 @@ private:
         }
     }
 
-    // Provide fixed object lists as C++ arrays (no STL)
+    // Provide fixed object lists as C++ arrays
     const string* getEarlyNightObjects() const {
         static const string early[5] = {
             "Moon (if up)",
@@ -203,7 +203,7 @@ private:
         return late;
     }
 
-    // ---------------- Report / File Output ----------------
+    // Reports / File Output
     void showReport() const {
         printReport(cout);
     }
@@ -251,12 +251,12 @@ private:
 
         out << string(66, '-') << "\n";
 
-        // Derived value tied to hobby: average observation hour (uses array in calculation)
+        // Derived value tied to hobby: average observation hour 
         double avgHr = computeAverageHour(obs, count); // function accepts array parameter
         out << fixed << setprecision(1);
         out << "Derived value: Average observation hour = " << avgHr << "\n";
 
-        // Another derived summary using enum counts (still based on recorded sessions)
+        // Another derived summary using enum counts 
         int earlyCount = countPhase(obs, count, EARLY_NIGHT);
         int midCount = countPhase(obs, count, MID_NIGHT);
         int lateCount = countPhase(obs, count, LATE_NIGHT);
@@ -269,8 +269,8 @@ private:
         out << "Most common phase: " << phaseToString(best) << "\n";
     }
 
-    // ---------------- Functions Using Arrays ----------------
-    // Function that accepts an array as a parameter (required)
+    // Functions Using Arrays 
+    // Function that accepts an array as a parameter
     double computeAverageHour(const Observation a[], int n) const {
         if (n <= 0) return 0.0;
 
@@ -296,10 +296,10 @@ private:
         return LATE_NIGHT;
     }
 
-    // ---------------- Input + Validation Helpers ----------------
+    //  Input & VALIDATION
     string getNonEmptyLine(const string& prompt) const {
         string s;
-        while (true) { // while loop requirement (validation)
+        while (true) { // while loop (validation)
             cout << prompt;
             getline(cin, s);
             if (s.length() > 0) return s;
@@ -310,7 +310,7 @@ private:
     int getIntInRange(const string& prompt, int minVal, int maxVal) const {
         int value;
 
-        while (true) { // while loop requirement (validation)
+        while (true) { // (validation) with while loop  
             cout << prompt;
             cin >> value;
 
@@ -332,9 +332,9 @@ private:
         }
     }
 
-    // ---------------- Derived Enum Logic ----------------
+    // used to switch statements from enum
     NightPhase computePhase(int hour24) const {
-        // Derived from time only (no extra input)
+        // from time input
         if (hour24 >= 18 && hour24 <= 21) return EARLY_NIGHT;
         if (hour24 >= 22 || hour24 <= 1)  return MID_NIGHT;
         if (hour24 >= 2 && hour24 <= 5)  return LATE_NIGHT;
@@ -356,7 +356,7 @@ private:
 };
 
 int main() {
-    // No global variables: object created locally in main
+    // object tracker created locally in main
     AstronomyTracker tracker;
     tracker.run();
     return 0;
