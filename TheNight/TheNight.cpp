@@ -60,7 +60,7 @@ private:
     //  menu 
     void showBanner() const {
         cout << "============================================================\n";
-        cout << "            NIGHT SKY OBJECT TRACKER\n";
+        cout << "            OBSERVING WHILE LATE-NIGHT(OWL)\n";
         cout << "============================================================\n";
         cout << "Enter DATE, TIME (hour), and LOCATION to log a sky session.\n";
         cout << "Then view a weekly report, get object suggestions, and save.\n";
