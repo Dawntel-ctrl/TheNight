@@ -379,6 +379,7 @@ private:
 
 // Debug builds define _DEBUG, so tests will run there.
 // Release builds run the normal program.
+// ===========================
 #ifndef _DEBUG
 int main() {
     AstronomyTracker tracker;

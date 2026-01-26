@@ -3,7 +3,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
-// ? IMPORTANT: change this to your real .cpp file name that contains AstronomyTracker
+
 #include "TheNight.cpp"
 
 // ------------------------------------------------------------
@@ -30,12 +30,10 @@ TEST_CASE("A) computeAverageHour - normal + edge + guard") {
     CHECK(t.computeAverageHour(arr, -5) == doctest::Approx(0.0));
 }
 
-// ------------------------------------------------------------
-// B) Enum decision logic — at least 3 tests
-// ------------------------------------------------------------
+// B)3 Enum decision logic 
 TEST_CASE("B) computePhase - enum logic") {
     AstronomyTracker t;
-
+    //^^
     CHECK(t.computePhase(20) == AstronomyTracker::EARLY_NIGHT);
     CHECK(t.computePhase(23) == AstronomyTracker::MID_NIGHT);
     CHECK(t.computePhase(3) == AstronomyTracker::LATE_NIGHT);
