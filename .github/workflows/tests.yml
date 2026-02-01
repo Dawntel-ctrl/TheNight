@@ -15,16 +15,10 @@ jobs:
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
-      # Build tests.exe from YOUR files (edit the file list below to match your repo)
       - name: Build tests
         shell: cmd
         run: |
-          REM ---- SET THE FOLDER THAT CONTAINS YOUR .cpp FILES ----
-          REM If your code is inside a subfolder named TheNight, keep this:
           cd TheNight
-
-          REM ---- COMPILE: test.cpp + your implementation .cpp files ----
-          REM Edit the list after test.cpp to match your project (examples: TheNight.cpp, AstronomyTracker.cpp, etc.)
           cl /nologo /EHsc /std:c++17 /D RUN_TESTS ^
             test.cpp TheNight.cpp ^
             /Fe:tests.exe
