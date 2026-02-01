@@ -1,14 +1,17 @@
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <string>
 #include <limits>
 
+
+//inside test added
 using namespace std;
 
 class AstronomyTracker {
 public:
-    // Enum: excellent for time direction 
+    // Enum: excellent for time direction
     enum NightPhase { EARLY_NIGHT = 1, MID_NIGHT = 2, LATE_NIGHT = 3, DAYTIME = 4 };
 
     // Struct: groups related info for one observation session
@@ -50,14 +53,67 @@ public:
             }
         } while (choice != 5);
     }
-    // session count here
+
+    // delacr prep public
+    int getObservationCount() const { return count; } // getter keeps variables private
+
+    void clear() { count = 0; } // helpful for tests to reset state
+
+    bool addObservation(const Observation& o) {
+        // Guard checks (invalid cases)
+        if (count >= MAX_OBS) return false;               // array-size validation
+        if (o.date.length() == 0) return false;           // non-empty date
+        if (o.location.length() == 0) return false;       // non-empty location
+        if (o.hour24 < 0 || o.hour24 > 23) return false;  // valid hour
+
+        Observation copy = o;
+        copy.phase = computePhase(copy.hour24); // ensure enum matches hour
+        obs[count] = copy;
+        count++;
+        return true;
+    }
+
+//     PUBLIC so doctest can call them
+    // (You do NOT make variables public; only these methods.)
+    double computeAverageHour(const Observation a[], int n) const {
+        if (n <= 0) return 0.0;
+
+        int total = 0;
+        for (int i = 0; i < n; i++) {
+            total += a[i].hour24;
+        }
+        return static_cast<double>(total) / n;
+    }
+
+    int countPhase(const Observation a[], int n, NightPhase p) const {
+        int c = 0;
+        for (int i = 0; i < n; i++) {
+            if (a[i].phase == p) c++;
+        }
+        return c;
+    }
+
+    NightPhase mostCommonPhase(int earlyCount, int midCount, int lateCount) const {
+        if (earlyCount >= midCount && earlyCount >= lateCount) return EARLY_NIGHT;
+        if (midCount >= earlyCount && midCount >= lateCount) return MID_NIGHT;
+        return LATE_NIGHT;
+    }
+
+    NightPhase computePhase(int hour24) const {
+        // derived from time input
+        if (hour24 >= 18 && hour24 <= 21) return EARLY_NIGHT;
+        if (hour24 >= 22 || hour24 <= 1)  return MID_NIGHT;
+        if (hour24 >= 2 && hour24 <= 5)   return LATE_NIGHT;
+        return DAYTIME;
+    }
+
 private:
     static const int MAX_OBS = 7;      // set array size
-    Observation obs[MAX_OBS];          // array of structs (they stored in class)
+    Observation obs[MAX_OBS];          // array of structs (stored in class)
     int count;                         // how many have been filled
 
 private:
-    //  menu 
+    // menu
     void showBanner() const {
         cout << "============================================================\n";
         cout << "            OBSERVING WHILE LATE-NIGHT(OWL)\n";
@@ -77,7 +133,7 @@ private:
         cout << "====================================================\n";
     }
 
-    // add Observation function 
+    // add Observation function (interactive)
     void addObservation() {
         // Array-based validation: prevent exceeding array size
         if (count >= MAX_OBS) {
@@ -93,12 +149,16 @@ private:
         o.location = getNonEmptyLine("Enter location (spaces allowed): ");
         o.phase = computePhase(o.hour24); // derived enum value
 
-        obs[count] = o;
-        count++;
+        //  (doctest prep): use the addObservation(o)
+        // so BOTH interactive mode and tests share the same validation/store logic.
+        if (!addObservation(o)) {
+            cout << "Could not save observation (invalid data or array full).\n";
+            return;
+        }
 
         cout << "\nSaved observation (" << count << "/" << MAX_OBS << ").\n";
 
-        // Compound if/else block #1 
+        // Compound if/else block #1
         if ((o.hour24 >= 18 && o.hour24 <= 23) && (o.location.length() >= 3)) {
             cout << "Tip: Good evening window for planets and bright stars.\n";
         }
@@ -110,7 +170,7 @@ private:
         }
     }
 
-    //  Visible Objects for user 
+    // Visible Objects for user
     void showVisibleObjectsMenu() const {
         // Array-based validation: ensure at least one entry exists before showing phase-based objects
         if (count == 0) {
@@ -148,7 +208,7 @@ private:
             break;
         }
 
-        // Compound if/else block #2 
+        // Compound if/else block #2
         int hr = obs[pick - 1].hour24;
         if ((hr >= 22 && hr <= 23) && (p == MID_NIGHT)) {
             cout << "\nRecommendation: Try fainter targets and star clusters.\n";
@@ -251,12 +311,12 @@ private:
 
         out << string(66, '-') << "\n";
 
-        // Derived value tied to hobby: average observation hour 
-        double avgHr = computeAverageHour(obs, count); // function accepts array parameter
+        // Derived value tied to hobby: average observation hour
+        double avgHr = computeAverageHour(obs, count);
         out << fixed << setprecision(1);
         out << "Derived value: Average observation hour = " << avgHr << "\n";
 
-        // Another derived summary using enum counts 
+        // Another derived summary using enum counts
         int earlyCount = countPhase(obs, count, EARLY_NIGHT);
         int midCount = countPhase(obs, count, MID_NIGHT);
         int lateCount = countPhase(obs, count, LATE_NIGHT);
@@ -269,34 +329,7 @@ private:
         out << "Most common phase: " << phaseToString(best) << "\n";
     }
 
-    // Functions Using Arrays 
-    // Function that accepts an array as a parameter
-    double computeAverageHour(const Observation a[], int n) const {
-        if (n <= 0) return 0.0;
-
-        int total = 0;
-        for (int i = 0; i < n; i++) {
-            total += a[i].hour24;
-        }
-        return static_cast<double>(total) / n;
-    }
-
-    // Another array-parameter function (counts enum occurrences)
-    int countPhase(const Observation a[], int n, NightPhase p) const {
-        int c = 0;
-        for (int i = 0; i < n; i++) {
-            if (a[i].phase == p) c++;
-        }
-        return c;
-    }
-
-    NightPhase mostCommonPhase(int earlyCount, int midCount, int lateCount) const {
-        if (earlyCount >= midCount && earlyCount >= lateCount) return EARLY_NIGHT;
-        if (midCount >= earlyCount && midCount >= lateCount) return MID_NIGHT;
-        return LATE_NIGHT;
-    }
-
-    //  Input & VALIDATION
+    // Input & VALIDATION
     string getNonEmptyLine(const string& prompt) const {
         string s;
         while (true) { // while loop (validation)
@@ -310,7 +343,7 @@ private:
     int getIntInRange(const string& prompt, int minVal, int maxVal) const {
         int value;
 
-        while (true) { // (validation) with while loop  
+        while (true) { // (validation) with while loop
             cout << prompt;
             cin >> value;
 
@@ -332,15 +365,6 @@ private:
         }
     }
 
-    // used to switch statements from enum
-    NightPhase computePhase(int hour24) const {
-        // from time input
-        if (hour24 >= 18 && hour24 <= 21) return EARLY_NIGHT;
-        if (hour24 >= 22 || hour24 <= 1)  return MID_NIGHT;
-        if (hour24 >= 2 && hour24 <= 5)  return LATE_NIGHT;
-        return DAYTIME;
-    }
-
     string phaseToString(NightPhase p) const {
         if (p == EARLY_NIGHT) return "Early Night";
         if (p == MID_NIGHT)   return "Mid Night";
@@ -355,9 +379,14 @@ private:
     }
 };
 
+// Debug builds define _DEBUG, so tests will run there.
+// Release builds run the normal program.
+// ===========================
+#ifndef _DEBUG
 int main() {
-    // object tracker created locally in main
     AstronomyTracker tracker;
     tracker.run();
     return 0;
 }
+#endif
+
