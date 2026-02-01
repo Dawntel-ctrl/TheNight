@@ -1,7 +1,5 @@
-#ifdef RUN_TESTS
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
-#endif
 
 #include "TheNight.h"
 
@@ -35,9 +33,9 @@ TEST_CASE("B) computePhase - enum logic") {
 }
 
 // ------------------------------------------------------------
-// C) Struct/array processing — at least 3 tests
+// C) Struct / array processing
 // ------------------------------------------------------------
-TEST_CASE("C) countPhase + mostCommonPhase - array/struct processing") {
+TEST_CASE("C) countPhase + mostCommonPhase") {
     AstronomyTracker t;
 
     AstronomyTracker::Observation arr[4];
