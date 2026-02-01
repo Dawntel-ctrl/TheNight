@@ -1,13 +1,15 @@
-#ifdef _DEBUG
-
+#ifdef RUN_TESTS
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 
-#include "TheNight.cpp"
+
+
+
+
 
 // ------------------------------------------------------------
-// A) Calculations — at least 4 tests
+// A) Calculations â€” at least 4 tests
 // ------------------------------------------------------------
 TEST_CASE("A) computeAverageHour - normal + edge + guard") {
     AstronomyTracker t;
@@ -43,7 +45,7 @@ TEST_CASE("B) computePhase - enum logic") {
 }
 
 // ------------------------------------------------------------
-// C) Struct/array processing — at least 3 tests
+// C) Struct/array processing â€” at least 3 tests
 // ------------------------------------------------------------
 TEST_CASE("C) countPhase + mostCommonPhase - array/struct processing") {
     AstronomyTracker t;
@@ -62,7 +64,7 @@ TEST_CASE("C) countPhase + mostCommonPhase - array/struct processing") {
 }
 
 // ------------------------------------------------------------
-// D) Class methods — at least 2 tests (no cin)
+// D) Class methods â€” at least 2 tests (no cin)
 // Normal + invalid/guard
 // ------------------------------------------------------------
 TEST_CASE("D) addObservation + getObservationCount - class method tests") {
