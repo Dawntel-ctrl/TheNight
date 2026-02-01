@@ -19,7 +19,7 @@ jobs:
         shell: cmd
         run: |
           cd TheNight
-          cl /nologo /EHsc /std:c++17 ^
+          cl /nologo /EHsc /std:c++17 /D RUN_TESTS ^
             test.cpp TheNight.cpp ^
             /Fe:tests.exe
 
