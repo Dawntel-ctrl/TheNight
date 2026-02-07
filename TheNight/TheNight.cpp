@@ -72,7 +72,7 @@ private:
         cout << "1) Add observation (date, time, location)\n";
         cout << "2) View weekly summary report\n";
         cout << "3) Show visible objects (based on time phase)\n";
-        cout << "4) Save report to file (report.txt)\n";
+        cout << "4) Save report to file(.txt) \n";
         cout << "5) Quit\n";
         cout << "====================================================\n";
     }
@@ -144,7 +144,7 @@ private:
             printFixedObjectList(getLateNightObjects(), 5);
             break;
         default:
-            cout << "It may be daylight/bright sky. Try observing after 18:00.\n";
+            cout << "It may be daylight/too bright. Try observing after 18:00.\n";
             break;
         }
 
