@@ -1,0 +1,30 @@
+name: C++ unit tests (Windows)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build tests
+        shell: cmd
+        run: |
+          cd TheNight
+          cl /nologo /EHsc /std:c++17 /D RUN_TESTS ^
+            test.cpp TheNight.cpp ^
+            /Fe:tests.exe
+
+      - name: Run tests
+        shell: cmd
+        run: |
+          cd TheNight
+          tests.exe
