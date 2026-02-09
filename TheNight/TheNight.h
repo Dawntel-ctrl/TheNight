@@ -102,7 +102,7 @@ private:
         if (count >= MAX_OBS) return;
 
         Observation o;
-        o.date = getNonEmptyLine("Enter date: ");
+        o.date = getNonEmptyLine("Enter date: eg: 1991-02-28 ");
         o.hour24 = getIntInRange("Enter hour (0-23): ", 0, 23);
         o.location = getNonEmptyLine("Enter location: ");
         o.phase = computePhase(o.hour24);

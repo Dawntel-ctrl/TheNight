@@ -1,52 +1,66 @@
+#define RUN_TESTS
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
-#include "TheNight.h"
+#include "NightBase.h"
+#include "NightComp.h"
+#include "NightOver.h"
+#include "NightDerived.h"
+#include <sstream>
 
-// ------------------------------------------------------------
-// A) Calculations — at least 4 tests
-// ------------------------------------------------------------
-TEST_CASE("A) computeAverageHour - normal + edge + guard") {
-    AstronomyTracker t;
-
-    AstronomyTracker::Observation arr[3];
-    arr[0] = { "2026-01-18", 20, "City Park", t.computePhase(20) };
-    arr[1] = { "2026-01-19", 22, "City Park", t.computePhase(22) };
-    arr[2] = { "2026-01-20",  0, "City Park", t.computePhase(0) };
-
-    CHECK(t.computeAverageHour(arr, 3) == doctest::Approx((20 + 22 + 0) / 3.0));
-    CHECK(t.computeAverageHour(arr, 1) == doctest::Approx(20.0));
-    CHECK(t.computeAverageHour(arr, 0) == doctest::Approx(0.0));
-    CHECK(t.computeAverageHour(arr, -5) == doctest::Approx(0.0));
+TEST_CASE("NightBase default ctor initializes fields") {
+    NightBase b;
+    CHECK(b.getDate() == "");
+    CHECK(b.getHour24() == 0);
+    CHECK(b.getPhase() == DAYTIME);
 }
 
-// ------------------------------------------------------------
-// B) Enum decision logic
-// ------------------------------------------------------------
-TEST_CASE("B) computePhase - enum logic") {
-    AstronomyTracker t;
-
-    CHECK(t.computePhase(20) == AstronomyTracker::EARLY_NIGHT);
-    CHECK(t.computePhase(23) == AstronomyTracker::MID_NIGHT);
-    CHECK(t.computePhase(3)  == AstronomyTracker::LATE_NIGHT);
-    CHECK(t.computePhase(12) == AstronomyTracker::DAYTIME);
+TEST_CASE("NightBase parameterized ctor initializes fields") {
+    NightBase b("2026-02-08", 23, MID_NIGHT);
+    CHECK(b.getDate() == "2026-02-08");
+    CHECK(b.getHour24() == 23);
+    CHECK(b.getPhase() == MID_NIGHT);
 }
 
-// ------------------------------------------------------------
-// C) Struct / array processing
-// ------------------------------------------------------------
-TEST_CASE("C) countPhase + mostCommonPhase") {
-    AstronomyTracker t;
+TEST_CASE("NightBase setters/getters work") {
+    NightBase b;
+    b.setDate("2000-01-01");
+    b.setHour24(18);
+    b.setPhase(EARLY_NIGHT);
+    CHECK(b.getDate() == "2000-01-01");
+    CHECK(b.getHour24() == 18);
+    CHECK(b.getPhase() == EARLY_NIGHT);
+}
 
-    AstronomyTracker::Observation arr[4];
-    arr[0] = { "d1", 20, "Loc", t.computePhase(20) }; // EARLY
-    arr[1] = { "d2", 23, "Loc", t.computePhase(23) }; // MID
-    arr[2] = { "d3", 23, "Loc", t.computePhase(23) }; // MID
-    arr[3] = { "d4",  3, "Loc", t.computePhase(3)  }; // LATE
+TEST_CASE("NightComp helper works (isEmpty)") {
+    NightComp c;
+    CHECK(c.isEmpty() == true);
+    c.setLocation("Detroit");
+    CHECK(c.isEmpty() == false);
+    CHECK(c.getLocation() == "Detroit");
+}
 
-    CHECK(t.countPhase(arr, 4, AstronomyTracker::EARLY_NIGHT) == 1);
-    CHECK(t.countPhase(arr, 4, AstronomyTracker::MID_NIGHT)   == 2);
-    CHECK(t.countPhase(arr, 4, AstronomyTracker::LATE_NIGHT)  == 1);
+TEST_CASE("NightOver ctor sets base + derived + composition") {
+    NightComp loc("Hanoi");
+    NightOver o("2026-02-08", 20, EARLY_NIGHT, loc, true);
 
-    CHECK(t.mostCommonPhase(1, 2, 1) == AstronomyTracker::MID_NIGHT);
+    CHECK(o.getDate() == "2026-02-08");
+    CHECK(o.getHour24() == 20);
+    CHECK(o.getPhase() == EARLY_NIGHT);
+
+    CHECK(o.getLocationInfo().getLocation() == "Hanoi");
+    CHECK(o.getClearSky() == true);
+}
+
+TEST_CASE("Derived print overrides and calls base print") {
+    NightComp loc("Wayne State");
+    NightDerived d("2026-02-08", 2, LATE_NIGHT, loc, 5);
+
+    std::ostringstream oss;
+    d.print(oss);
+    const std::string out = oss.str();
+
+    CHECK(out.find("Date: 2026-02-08") != std::string::npos);
+    CHECK(out.find("Hour24: 2") != std::string::npos);
+    CHECK(out.find("Object count: 5") != std::string::npos);
 }

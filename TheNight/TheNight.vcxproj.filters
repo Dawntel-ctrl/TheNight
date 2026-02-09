@@ -22,4 +22,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TheNight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightComp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightDerived.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightOver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
