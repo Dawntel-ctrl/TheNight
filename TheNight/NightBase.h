@@ -25,7 +25,7 @@ public:
         : date(d), hour24(h), phase(p) {
     }
 
-    // getters/setters funn
+    // getters/setters 
     void setDate(const std::string& d) { date = d; }
     std::string getDate() const { return date; }
 
