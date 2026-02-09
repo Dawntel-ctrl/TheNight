@@ -1,6 +1,6 @@
 # Night Sky Object Tracker
+![CI](https://github.com/Dawntel-ctrl/TheNight/actions/workflows/tests.yml/badge.svg)
 
-[![C++ doctest (Windows)](https://github.com/JohnAtMacomb/SimpleGitHubActions/actions/workflows/tests.yml/badge.svg)](https://github.com/JohnAtMacomb/SimpleGitHubActions/actions/workflows/tests.yml)
 
 This is a simple C++ console program for tracking amateur astronomy observations.  
 Users can log night sky sessions by entering a date, time, and location, then view a summary report and see which objects are best to observe based on the time of night.
