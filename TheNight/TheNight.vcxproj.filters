@@ -26,9 +26,6 @@
     <ClInclude Include="TheNight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NightBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NightComp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -38,5 +35,11 @@
     <ClInclude Include="NightOver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NightBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NightClassDiagram.cd" />
   </ItemGroup>
 </Project>

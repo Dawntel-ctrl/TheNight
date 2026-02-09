@@ -1,39 +1,37 @@
 #pragma once
 
-#pragma once
 #include "NightBase.h"
 #include "NightComp.h"
 
 class NightDerived : public NightBase {
 private:
-    NightComp locationInfo;   // composition (ok to repeat)
-    int objectCount;          // new derived-only data member
+    NightComp locationInfo;   // composition
+    int objectCount;          // derived-only data
 
 public:
-    // default ctor
+    // default constructor
     NightDerived()
         : NightBase(), locationInfo(), objectCount(0) {
     }
 
-    // parameterized ctor
+    // parameterized constructor
     NightDerived(const std::string& d, int h, NightPhase p,
         const NightComp& loc, int count)
         : NightBase(d, h, p), locationInfo(loc), objectCount(count) {
     }
 
-    // getters/setters (derived fields)
+    // getters / setters
     void setLocationInfo(const NightComp& loc) { locationInfo = loc; }
-    NightComp getLocationInfo() const { return locationInfo; }
+    const NightComp& getLocationInfo() const { return locationInfo; }
 
     void setObjectCount(int c) { objectCount = c; }
     int getObjectCount() const { return objectCount; }
 
-    // override print (required)
+    // override print
     void print(std::ostream& out) const override {
-        NightBase::print(out); // MUST call base
+        NightBase::print(out);   // call base version
         out << "Location empty: "
             << (locationInfo.isEmpty() ? "Yes" : "No") << "\n";
         out << "Object count: " << objectCount << "\n";
     }
 };
-

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="NightBase" Collapsed="true">
+    <Position X="1.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQAAQAAgAAAAAAAIACAAIgAAAAAAAAABABEAQAAAAA=</HashCode>
+      <FileName>NightBase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NightComp">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAKACAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>NightComp.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NightDerived" Collapsed="true">
+    <Position X="6.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gCYICgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NightDerived.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NightOver" Collapsed="true">
+    <Position X="1.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAYoAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>NightOver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="NightPhase" Collapsed="true">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAEAAAAAACABAAAAAAAA=</HashCode>
+      <FileName>NightBase.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

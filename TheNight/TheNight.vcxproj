@@ -140,6 +140,9 @@
     <ClInclude Include="NightOver.h" />
     <ClInclude Include="TheNight.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="NightClassDiagram.cd" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
