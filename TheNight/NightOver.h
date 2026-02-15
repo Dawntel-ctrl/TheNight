@@ -30,4 +30,13 @@ public:
             << (locationInfo.isEmpty() ? "Yes" : "No") << "\n";
         out << "Clear sky: " << (isClearSky ? "Yes" : "No") << "\n";
     }
+
+    std::string getType() const override { // added
+        return "NightOver";
+    }
+
+
+
 };
+
+

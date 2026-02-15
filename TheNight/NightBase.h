@@ -42,5 +42,8 @@ public:
         out << "Phase: " << static_cast<int>(phase) << "\n";
     }
 
+
+    virtual std::string getType() const = 0;  //  addd new pure virtual
+
     virtual ~NightBase() = default;
 };

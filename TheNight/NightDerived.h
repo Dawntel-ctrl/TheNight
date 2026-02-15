@@ -34,4 +34,10 @@ public:
             << (locationInfo.isEmpty() ? "Yes" : "No") << "\n";
         out << "Object count: " << objectCount << "\n";
     }
+
+    std::string getType() const override {   // add to public 
+        return "NightDerived";
+    }
+
+
 };

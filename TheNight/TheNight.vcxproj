@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="NightManager.cpp" />
     <ClCompile Include="test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -134,6 +135,7 @@
     <ClCompile Include="TheNight.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NightManager.h" />
     <ClInclude Include="NightBase.h" />
     <ClInclude Include="NightComp.h" />
     <ClInclude Include="NightDerived.h" />

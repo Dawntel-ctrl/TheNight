@@ -6,58 +6,63 @@
 #include <string>
 #include <limits>
 
+// add (for polymorphism + manager)
+#include "NightManager.h"
+#include "NightDerived.h"
+#include "NightOver.h"
+#include "NightComp.h"
+
 class AstronomyTracker {
 public:
-    // Enum
-    enum NightPhase { EARLY_NIGHT = 1, MID_NIGHT = 2, LATE_NIGHT = 3, DAYTIME = 4 };
 
-    // Struct
+    //  (conflicts with NightBase enum)
+    /*
+    enum NightPhase { EARLY_NIGHT = 1, MID_NIGHT = 2, LATE_NIGHT = 3, DAYTIME = 4 };
+    */
+
+    // (old storage model)
+    /*
     struct Observation {
         std::string date;
         int hour24;
         std::string location;
         NightPhase phase;
     };
+    */
 
-    AstronomyTracker() : count(0) {}
+    //  OLD CONSTRUCTOR
+    // AstronomyTracker() : count(0) {}
+
+    // new construter (manager handles size)
+    AstronomyTracker() {}
 
     // ----------------------------
     // PUBLIC METHODS (TESTED)
     // ----------------------------
-    NightPhase computePhase(int hour24) const {
+
+    //  UPDATED RETURN TYPE to use global NightPhase
+    ::NightPhase computePhase(int hour24) const {
         if (hour24 >= 18 && hour24 <= 21) return EARLY_NIGHT;
         if (hour24 >= 22 || hour24 <= 1)  return MID_NIGHT;
         if (hour24 >= 2 && hour24 <= 5)   return LATE_NIGHT;
         return DAYTIME;
     }
 
-    std::string phaseToString(NightPhase p) const {
+    std::string phaseToString(::NightPhase p) const {
         if (p == EARLY_NIGHT) return "Early Night";
         if (p == MID_NIGHT)   return "Mid Night";
         if (p == LATE_NIGHT)  return "Late Night";
         return "Daytime";
     }
 
-    double computeAverageHour(const Observation a[], int n) const {
-        if (n <= 0) return 0.0;
-        int total = 0;
-        for (int i = 0; i < n; i++) total += a[i].hour24;
-        return static_cast<double>(total) / n;
-    }
+    // DELETE OLD ARRAY-BASED FUNCTIONS (they use Observation[])
+    /*
+    double computeAverageHour(const Observation a[], int n) const { ... }
 
-    int countPhase(const Observation a[], int n, NightPhase p) const {
-        int c = 0;
-        for (int i = 0; i < n; i++) {
-            if (a[i].phase == p) c++;
-        }
-        return c;
-    }
+    int countPhase(const Observation a[], int n, NightPhase p) const { ... }
 
-    NightPhase mostCommonPhase(int earlyCount, int midCount, int lateCount) const {
-        if (earlyCount >= midCount && earlyCount >= lateCount) return EARLY_NIGHT;
-        if (midCount >= earlyCount && midCount >= lateCount)   return MID_NIGHT;
-        return LATE_NIGHT;
-    }
+    NightPhase mostCommonPhase(int earlyCount, int midCount, int lateCount) const { ... }
+    */
 
     // ----------------------------
     // PROGRAM ENTRY (NOT TESTED)
@@ -81,9 +86,16 @@ public:
     }
 
 private:
+
+    // OLD FIXED STORAGE
+    /*
     static const int MAX_OBS = 7;
     Observation obs[MAX_OBS];
     int count;
+    */
+
+    // new, for dynamic storage
+    NightManager manager;
 
     // ----------------------------
     // PRIVATE UI / I/O
@@ -98,20 +110,26 @@ private:
         std::cout << "\n1) Add observation\n2) View report\n3) Show objects\n4) Save\n5) Quit\n";
     }
 
+    // had a rewrite now creates dynamic objects
     void addObservation() {
-        if (count >= MAX_OBS) return;
 
-        Observation o;
-        o.date = getNonEmptyLine("Enter date: eg: 1991-02-28 ");
-        o.hour24 = getIntInRange("Enter hour (0-23): ", 0, 23);
-        o.location = getNonEmptyLine("Enter location: ");
-        o.phase = computePhase(o.hour24);
+        std::string date = getNonEmptyLine("Enter date: eg: 1991-02-28 ");
+        int hour24 = getIntInRange("Enter hour (0-23): ", 0, 23);
+        std::string location = getNonEmptyLine("Enter location: ");
 
-        obs[count++] = o;
+        ::NightPhase phase = computePhase(hour24);
+
+        NightComp comp(location);
+
+        // added , dynamically allocate derived object
+        manager.add(new NightDerived(date, hour24, phase, comp, 0));
     }
 
     void showVisibleObjectsMenu() const {}
-    void showReport() const { printReport(std::cout); }
+
+    void showReport() const {
+        printReport(std::cout);
+    }
 
     void saveReportToFile(const std::string& filename) const {
         std::ofstream fout(filename);
@@ -119,8 +137,10 @@ private:
         printReport(fout);
     }
 
+    // updated to use manager
     void printReport(std::ostream& out) const {
-        out << "Sessions recorded: " << count << "\n";
+        out << "Sessions recorded: " << manager.getSize() << "\n";
+        manager.printAll(out);  // polymorphic print
     }
 
     std::string getNonEmptyLine(const std::string& prompt) const {
@@ -142,3 +162,4 @@ private:
         }
     }
 };
+
