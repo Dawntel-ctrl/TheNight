@@ -1,7 +1,7 @@
 Sessions recorded: 1
 Date: 2006-16-03
-Hour24: 23
-Phase: 2
-Location empty: No
+Hour24: 19
+Phase: 1
+Location: ohio
 Object count: 0
 -----------------
