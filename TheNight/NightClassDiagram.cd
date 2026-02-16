@@ -3,7 +3,7 @@
   <Class Name="NightBase" Collapsed="true">
     <Position X="1.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAQAAQAAgAAAAAAAIACAAIgAAAAAAAAABABEAQAAAAA=</HashCode>
+      <HashCode>EAQAAQAAgAAAAAAAIACAAIgAAQAAAAAABABEAQAAAAA=</HashCode>
       <FileName>NightBase.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -14,17 +14,17 @@
       <FileName>NightComp.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NightDerived">
+  <Class Name="NightDerived" Collapsed="true">
     <Position X="6.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gCYICgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>gCYICgAAAAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>NightDerived.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NightOver">
+  <Class Name="NightOver" Collapsed="true">
     <Position X="1.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAYoAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <HashCode>gAYoAAAAAAAAAABEAAAAAAAAAQAAAAAAAAAAAAAABAA=</HashCode>
       <FileName>NightOver.h</FileName>
     </TypeIdentifier>
   </Class>

@@ -30,14 +30,21 @@ public:
     // override print
     void print(std::ostream& out) const override {
         NightBase::print(out);   // call base version
+
+        // (did not print actual location)
+        /*
         out << "Location empty: "
             << (locationInfo.isEmpty() ? "Yes" : "No") << "\n";
+        */
+
+        // prints actual location (required for tests)
+        out << "Location: " << locationInfo.getLocation() << "\n";
+
         out << "Object count: " << objectCount << "\n";
     }
 
-    std::string getType() const override {   // add to public 
+    std::string getType() const override {
         return "NightDerived";
     }
-
-
 };
+

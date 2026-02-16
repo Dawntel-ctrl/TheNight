@@ -26,17 +26,20 @@ public:
 
     void print(std::ostream& out) const override {
         NightBase::print(out);
+
+        //  OLD VERSION
+        /*// 
         out << "Location empty: "
             << (locationInfo.isEmpty() ? "Yes" : "No") << "\n";
+        */
+
+        //  NEW  print actual location
+        out << "Location: " << locationInfo.getLocation() << "\n";
+
         out << "Clear sky: " << (isClearSky ? "Yes" : "No") << "\n";
     }
 
-    std::string getType() const override { // added
+    std::string getType() const override {
         return "NightOver";
     }
-
-
-
 };
-
-
