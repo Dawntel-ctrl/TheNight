@@ -22,9 +22,6 @@ jobs:
           cl /nologo /EHsc /std:c++17 /D RUN_TESTS ^
             test.cpp ^
             TheNight.cpp ^
-            NightBase.cpp ^
-            NightDerived.cpp ^
-            NightOver.cpp ^
             NightManager.cpp ^
             /Fe:tests.exe
 
@@ -33,4 +30,3 @@ jobs:
         run: |
           cd TheNight
           tests.exe
-
