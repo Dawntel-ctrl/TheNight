@@ -100,11 +100,11 @@ TEST_CASE("Derived print overrides and calls base print") {
     CHECK(out.find("Hour24: 2") != std::string::npos);
     CHECK(out.find("Object count: 5") != std::string::npos);
 
-    delete ptr;   // IMPORTANT
+    delete ptr;   // needed
 }
 
 
-//  new test needed FOR manager
+//  test FOR manager
 
 
 TEST_CASE("Manager adds items and tracks size") {

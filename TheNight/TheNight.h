@@ -94,7 +94,7 @@ private:
     int count;
     */
 
-    // new, for dynamic storage
+    // for dynamic storage
     NightManager manager;
 
     // ----------------------------
@@ -110,7 +110,7 @@ private:
         std::cout << "\n1) Add observation\n2) View report\n3) Show objects\n4) Save\n5) Quit\n";
     }
 
-    // had a rewrite now creates dynamic objects
+    // NOW creates dynamic objects
     void addObservation() {
 
         std::string date = getNonEmptyLine("Enter date: eg: 1991-02-28 ");
