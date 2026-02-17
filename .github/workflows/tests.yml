@@ -20,7 +20,9 @@ jobs:
         run: |
           cd TheNight
           cl /nologo /EHsc /std:c++17 /D RUN_TESTS ^
-            test.cpp TheNight.cpp ^
+            test.cpp ^
+            TheNight.cpp ^
+            NightManager.cpp ^
             /Fe:tests.exe
 
       - name: Run tests
