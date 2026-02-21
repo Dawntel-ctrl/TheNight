@@ -44,6 +44,30 @@ TEST_CASE("NightBase setters/getters work") {
 
 //  replacesment test  (test base through derived)
 
+//test from operator
+TEST_CASE("NightDerived operator== returns true for identical objects") {
+
+    NightComp loc1("Detroit");
+    NightDerived a("2026-02-08", 21, MID_NIGHT, loc1, 5);
+
+    NightComp loc2("Detroit");
+    NightDerived b("2026-02-08", 21, MID_NIGHT, loc2, 5);
+
+    CHECK(a == b);
+}
+
+TEST_CASE("NightDerived operator== returns false when objects differ") {
+
+    NightComp loc1("Detroit");
+    NightDerived a("2026-02-08", 21, MID_NIGHT, loc1, 5);
+
+    NightComp loc2("Chicago");  // different location
+    NightDerived b("2026-02-08", 21, MID_NIGHT, loc2, 5);
+
+    CHECK_FALSE(a == b);
+}
+
+
 TEST_CASE("Base functionality works through derived class") {
     NightComp loc("Test");
     NightDerived d("2026-02-08", 23, MID_NIGHT, loc, 3);

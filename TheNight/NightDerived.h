@@ -9,7 +9,18 @@ private:
     int objectCount;          // derived-only data
 
 public:
-    // default constructor
+   //will be used for ops
+    bool operator==(const NightDerived& other) const
+    {
+        return
+            getDate() == other.getDate() &&
+            getHour24() == other.getHour24() &&
+            getPhase() == other.getPhase() &&
+            locationInfo.getLocation() == other.locationInfo.getLocation() &&
+            objectCount == other.objectCount;
+    }
+   
+   // default constructor
     NightDerived()
         : NightBase(), locationInfo(), objectCount(0) {
     }
