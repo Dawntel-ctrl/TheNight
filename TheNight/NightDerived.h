@@ -9,6 +9,10 @@ private:
     int objectCount;          // derived-only data
 
 public:
+   
+   //2/22 
+    NightManager& operator+=(NightBase* item);
+    NightManager& operator-=(int index);
    //will be used for ops
     bool operator==(const NightDerived& other) const
     {

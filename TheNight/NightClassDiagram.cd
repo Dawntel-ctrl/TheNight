@@ -17,7 +17,7 @@
   <Class Name="NightDerived" Collapsed="true">
     <Position X="6.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gCYICgAAAAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>gCYICgAAAAAAAAAAAAAAAQgAAQAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>NightDerived.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -26,6 +26,20 @@
     <TypeIdentifier>
       <HashCode>gAYoAAAAAAAAAABEAAAAAAAAAQAAAAAAAAAAAAAABAA=</HashCode>
       <FileName>NightOver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DynamicArray&lt;T&gt;">
+    <Position X="8.5" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAEAIoAAAAAAAEAAAAAAQAAAAACEAA=</HashCode>
+      <FileName>NightDynamic.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NightManager" Collapsed="true">
+    <Position X="8.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAEAAAUAAgAAQAAAAEAAAAAAAAACAACIAA=</HashCode>
+      <FileName>NightManager.h</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="NightPhase">

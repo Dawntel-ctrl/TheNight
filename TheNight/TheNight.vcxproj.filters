@@ -44,6 +44,12 @@
     <ClInclude Include="NightManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NightTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightDynamic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="NightClassDiagram.cd" />

@@ -2,62 +2,35 @@
 #include <iostream>
 
 NightManager::NightManager(int cap)
-    : size(0), capacity(cap)
+    : items(cap)   // initialize template container
 {
-    items = new NightBase * [capacity];
 }
 
 NightManager::~NightManager()
 {
-    // delete each object
-    for (int i = 0; i < size; i++) {
+    // We still own the NightBase* objects
+    for (int i = 0; i < items.getSize(); i++) {
         delete items[i];
     }
-
-    // delete array
-    delete[] items;
-}
-
-void NightManager::resize()
-{
-    capacity *= 2;
-
-    NightBase** temp = new NightBase * [capacity];
-
-    for (int i = 0; i < size; i++) {
-        temp[i] = items[i];
-    }
-
-    delete[] items;
-    items = temp;
 }
 
 void NightManager::add(NightBase* item)
 {
-    if (size == capacity) {
-        resize();
-    }
-
-    items[size++] = item;
+    items.add(item);
 }
 
 void NightManager::remove(int index)
 {
-    if (index < 0 || index >= size)
+    if (index < 0 || index >= items.getSize())
         return;
 
-    delete items[index];
-
-    for (int i = index; i < size - 1; i++) {
-        items[i] = items[i + 1];
-    }
-
-    size--;
+    delete items[index];     // delete actual object
+    items.remove(index);     // shift handled by template
 }
 
 void NightManager::printAll(std::ostream& out) const
 {
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < items.getSize(); i++) {
         items[i]->print(out);
         out << "-----------------\n";
     }
@@ -65,5 +38,27 @@ void NightManager::printAll(std::ostream& out) const
 
 int NightManager::getSize() const
 {
-    return size;
+    return items.getSize();
+}
+
+NightBase* NightManager::operator[](int index) const
+{
+    return items[index];   // bounds checking handled inside template
+}
+
+NightManager& NightManager::operator+=(NightBase* item)
+{
+    add(item);
+    return *this;
+}
+
+NightManager& NightManager::operator-=(int index)
+{
+    remove(index);
+    return *this;
+}
+
+bool NightManager::isSameSize(const NightManager& other) const
+{
+    return this->getSize() == other.getSize();
 }

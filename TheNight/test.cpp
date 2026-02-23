@@ -10,7 +10,9 @@
 #include "NightDerived.h"
 
 #include <sstream>
-
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 //  NightBase is now abstract
 
@@ -41,21 +43,82 @@ TEST_CASE("NightBase setters/getters work") {
 }
 */
 
+#include "NightTemplate.h"
+#include "NightDynamic.h"
+//dynamic test 1&2
+TEST_CASE("Class template works with int")
+{
+    DynamicArray<int> arr;
 
-//  replacesment test  (test base through derived)
+    arr.add(5);
+    arr.add(10);
 
-//test from operator
-TEST_CASE("NightDerived operator== returns true for identical objects") {
+    CHECK(arr.getSize() == 2);
+    CHECK(arr[0] == 5);
+    CHECK(arr[1] == 10);
+}
+TEST_CASE("Class template resize and remove")
+{
+    DynamicArray<int> arr(2);
 
-    NightComp loc1("Detroit");
-    NightDerived a("2026-02-08", 21, MID_NIGHT, loc1, 5);
+    arr.add(1);
+    arr.add(2);
+    arr.add(3);  // forces resize
 
-    NightComp loc2("Detroit");
-    NightDerived b("2026-02-08", 21, MID_NIGHT, loc2, 5);
+    CHECK(arr.getSize() == 3);
 
-    CHECK(a == b);
+    arr.remove(1); // remove 2
+
+    CHECK(arr.getSize() == 2);
+    CHECK(arr[0] == 1);
+    CHECK(arr[1] == 3);
 }
 
+
+// template test
+TEST_CASE("Function template works with int")
+{
+    CHECK(maxValue(5, 10) == 10);
+}
+
+TEST_CASE("Function template works with double")
+{
+    CHECK(maxValue(3.5, 2.1) == 3.5);
+}
+
+// 2/22 test operator +=, -=
+TEST_CASE("operator+= adds item correctly") {
+
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("Vegas"), 7
+    );
+
+    CHECK(manager.getSize() == 1);
+}
+
+TEST_CASE("operator-= removes item correctly") {
+
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("Vegas"), 7
+    );
+
+    manager -= 0;
+
+    CHECK(manager.getSize() == 0);
+}
+
+
+
+// 2/22 Operator== Tests 
+
+
+// Not Equal Objects
 TEST_CASE("NightDerived operator== returns false when objects differ") {
 
     NightComp loc1("Detroit");
@@ -67,6 +130,43 @@ TEST_CASE("NightDerived operator== returns false when objects differ") {
     CHECK_FALSE(a == b);
 }
 
+// Equal Objects
+TEST_CASE("NightDerived operator== returns true for identical objects") {
+
+    NightComp loc1("Detroit");
+    NightDerived a("2026-02-08", 21, MID_NIGHT, loc1, 5);
+
+    NightComp loc2("Detroit");
+    NightDerived b("2026-02-08", 21, MID_NIGHT, loc2, 5);
+
+    CHECK(a == b);
+}
+
+
+
+// 2/22 Polymorphic Streaming Test (operator<< NEW)
+
+
+TEST_CASE("operator<< works polymorphically") {
+
+    NightBase* ptr = new NightDerived(
+        "2026-02-08", 3, LATE_NIGHT,
+        NightComp("Moon"), 9
+    );
+
+    std::ostringstream oss;
+    oss << *ptr;   // uses overloaded <<
+
+    std::string out = oss.str();
+
+    CHECK(out.find("Moon") != std::string::npos);
+    CHECK(out.find("Object count: 9") != std::string::npos);
+
+    delete ptr;
+}
+
+
+//  replacesment test  (test base through derived)
 
 TEST_CASE("Base functionality works through derived class") {
     NightComp loc("Test");
@@ -91,7 +191,6 @@ TEST_CASE("NightComp helper works (isEmpty)") {
 
 // NightOver (UNCHANGED)
 
-
 TEST_CASE("NightOver ctor sets base + derived + composition") {
     NightComp loc("Hanoi");
     NightOver o("2026-02-08", 20, EARLY_NIGHT, loc, true);
@@ -102,6 +201,111 @@ TEST_CASE("NightOver ctor sets base + derived + composition") {
 
     CHECK(o.getLocationInfo().getLocation() == "Hanoi");
     CHECK(o.getClearSky() == true);
+}
+
+
+// Virtual print test (polymorphism)
+
+TEST_CASE("Derived print overrides and calls base print") {
+
+    NightBase* ptr = new NightDerived(
+        "2026-02-08", 2, LATE_NIGHT,
+        NightComp("Wayne State"), 5
+    );
+
+    std::ostringstream oss;
+    ptr->print(oss);   // polymorphic call
+
+    const std::string out = oss.str();
+
+    CHECK(out.find("Date: 2026-02-08") != std::string::npos);
+    CHECK(out.find("Hour24: 2") != std::string::npos);
+    CHECK(out.find("Object count: 5") != std::string::npos);
+
+    delete ptr;   // needed
+}
+
+
+
+// 2/22 operator[] Tests 
+
+
+TEST_CASE("Manager operator[] returns correct item for valid index") {
+
+    NightManager manager;
+
+    manager.add(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 2
+    ));
+
+    CHECK(manager[0] != nullptr);
+    CHECK(manager[0]->getDate() == "2026-02-08");
+}
+
+TEST_CASE("Manager operator[] returns nullptr for invalid index") {
+
+    NightManager manager;
+
+    CHECK(manager[0] == nullptr);   // empty container
+    CHECK(manager[-1] == nullptr);  // negative index
+}
+
+
+//  test FOR manager (existing functionality)
+
+TEST_CASE("Manager adds items and tracks size") {
+
+    NightManager manager;
+
+    manager.add(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 2
+    ));
+
+    manager.add(new NightOver(
+        "2026-02-09", 22, MID_NIGHT,
+        NightComp("NYC"), true
+    ));
+
+    CHECK(manager.getSize() == 2);
+}
+
+TEST_CASE("Manager remove deletes and shifts correctly") {
+
+    NightManager manager;
+
+    manager.add(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 2
+    ));
+
+    manager.add(new NightOver(
+        "2026-02-09", 22, MID_NIGHT,
+        NightComp("NYC"), true
+    ));
+
+    manager.remove(0);
+
+    CHECK(manager.getSize() == 1);
+}
+
+TEST_CASE("Manager printAll works polymorphically") {
+
+    NightManager manager;
+
+    manager.add(new NightDerived(
+        "2026-02-08", 2, LATE_NIGHT,
+        NightComp("Mars"), 7
+    ));
+
+    std::ostringstream oss;
+    manager.printAll(oss);
+
+    const std::string out = oss.str();
+
+    CHECK(out.find("Mars") != std::string::npos);
+    CHECK(out.find("Object count: 7") != std::string::npos);
 }
 
 
@@ -180,7 +384,7 @@ TEST_CASE("Manager printAll works polymorphically") {
     manager.printAll(oss);
 
     const std::string out = oss.str();
-
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
     CHECK(out.find("Mars") != std::string::npos);
     CHECK(out.find("Object count: 7") != std::string::npos);
 }

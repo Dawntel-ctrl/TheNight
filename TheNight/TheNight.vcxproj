@@ -135,11 +135,13 @@
     <ClCompile Include="TheNight.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NightDynamic.h" />
     <ClInclude Include="NightManager.h" />
     <ClInclude Include="NightBase.h" />
     <ClInclude Include="NightComp.h" />
     <ClInclude Include="NightDerived.h" />
     <ClInclude Include="NightOver.h" />
+    <ClInclude Include="NightTemplate.h" />
     <ClInclude Include="TheNight.h" />
   </ItemGroup>
   <ItemGroup>

@@ -47,3 +47,9 @@ public:
 
     virtual ~NightBase() = default;
 };
+// This operator allows objects derived from NightBase 
+inline std::ostream& operator<<(std::ostream& out, const NightBase& obj)
+{
+    obj.print(out);   // virtual dispatch happens here
+    return out;
+}

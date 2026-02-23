@@ -1,15 +1,11 @@
 #pragma once
 
-
 #include "NightBase.h"
+#include "NightDynamic.h"
 
 class NightManager {
 private:
-    NightBase** items;   // dynamic array of base pointers
-    int size;
-    int capacity;
-
-    void resize();       // private helper
+    DynamicArray<NightBase*> items;
 
 public:
     NightManager(int cap = 4);
@@ -21,5 +17,11 @@ public:
     void printAll(std::ostream& out) const;
 
     int getSize() const;
-};
 
+    NightBase* operator[](int index) const;
+
+    NightManager& operator+=(NightBase* item);
+    NightManager& operator-=(int index);
+
+    bool isSameSize(const NightManager& other) const;
+};
