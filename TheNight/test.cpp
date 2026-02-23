@@ -144,7 +144,7 @@ TEST_CASE("NightDerived operator== returns true for identical objects") {
 
 
 
-// 2/22 Polymorphic Streaming Test (operator<< NEW)
+// 2/22 Polymorphic Streaming Test (operator<<)
 
 
 TEST_CASE("operator<< works polymorphically") {
