@@ -1,5 +1,6 @@
 #include "NightManager.h"
 #include <iostream>
+#include "NightException.h"
 
 NightManager::NightManager(int cap)
     : items(cap)   // initialize template container
@@ -21,8 +22,8 @@ void NightManager::add(NightBase* item)
 
 void NightManager::remove(int index)
 {
-    if (index < 0 || index >= items.getSize())
-        return;
+    if (index < 0 || index >= items.getSize()) // 3/1
+        throw NightException("NightManager: invalid removal index");
 
     delete items[index];     // delete actual object
     items.remove(index);     // shift handled by template

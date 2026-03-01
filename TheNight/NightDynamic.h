@@ -1,5 +1,5 @@
 #pragma once
-#pragma once
+#include "NightException.h"
 // replaments for NightBase** items;
 //int size;
 //int capacity;
@@ -49,7 +49,7 @@ public:
 
     void remove(int index)
     {
-        if (index < 0 || index >= size) //now throwing
+        if (index < 0 || index >= size) //now throwing 3/1
             throw NightException("DynamicArray: invalid removal index");
 
         for (int i = index; i < size - 1; i++) {

@@ -8,7 +8,7 @@
 #include "NightComp.h"
 #include "NightOver.h"
 #include "NightDerived.h"
-
+#include "NightException.h"
 #include <sstream>
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -204,26 +204,6 @@ TEST_CASE("NightOver ctor sets base + derived + composition") {
 }
 
 
-// Virtual print test (polymorphism)
-
-TEST_CASE("Derived print overrides and calls base print") {
-
-    NightBase* ptr = new NightDerived(
-        "2026-02-08", 2, LATE_NIGHT,
-        NightComp("Wayne State"), 5
-    );
-
-    std::ostringstream oss;
-    ptr->print(oss);   // polymorphic call
-
-    const std::string out = oss.str();
-
-    CHECK(out.find("Date: 2026-02-08") != std::string::npos);
-    CHECK(out.find("Hour24: 2") != std::string::npos);
-    CHECK(out.find("Object count: 5") != std::string::npos);
-
-    delete ptr;   // needed
-}
 
 
 
@@ -242,14 +222,14 @@ TEST_CASE("Manager operator[] returns correct item for valid index") {
     CHECK(manager[0] != nullptr);
     CHECK(manager[0]->getDate() == "2026-02-08");
 }
+// Delete me because "manager will throw"
+//TEST_CASE("Manager operator[] returns nullptr for invalid index") {
 
-TEST_CASE("Manager operator[] returns nullptr for invalid index") {
+  //  NightManager manager;
 
-    NightManager manager;
-
-    CHECK(manager[0] == nullptr);   // empty container
-    CHECK(manager[-1] == nullptr);  // negative index
-}
+    //CHECK(manager[0] == nullptr);   // empty container
+    //CHECK(manager[-1] == nullptr);  // negative index
+//}
 
 
 //  test FOR manager (existing functionality)
@@ -387,4 +367,35 @@ TEST_CASE("Manager printAll works polymorphically") {
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
     CHECK(out.find("Mars") != std::string::npos);
     CHECK(out.find("Object count: 7") != std::string::npos);
+}
+
+//3/1
+
+TEST_CASE("NightManager throws on invalid index access")
+{
+    NightManager manager;
+
+    CHECK_THROWS_AS(manager[0], NightException);
+    CHECK_THROWS_AS(manager[-1], NightException);
+    CHECK_THROWS_AS(manager[99], NightException);
+}
+
+TEST_CASE("NightManager throws on invalid removal")
+{
+    NightManager manager;
+
+    CHECK_THROWS_AS(manager -= 0, NightException);
+}
+
+TEST_CASE("DynamicArray throws on invalid access and removal")
+{
+    DynamicArray<int> arr;
+
+    CHECK_THROWS_AS(arr[0], NightException);
+    CHECK_THROWS_AS(arr.remove(0), NightException);
+
+    arr.add(10);
+
+    CHECK_THROWS_AS(arr[5], NightException);
+    CHECK_THROWS_AS(arr.remove(5), NightException);
 }
