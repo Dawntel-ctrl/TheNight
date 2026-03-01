@@ -49,8 +49,8 @@ public:
 
     void remove(int index)
     {
-        if (index < 0 || index >= size)
-            return;
+        if (index < 0 || index >= size) //now throwing
+            throw NightException("DynamicArray: invalid removal index");
 
         for (int i = index; i < size - 1; i++) {
             items[i] = items[i + 1];
@@ -62,7 +62,7 @@ public:
     T operator[](int index) const
     {
         if (index < 0 || index >= size)
-            return T{}; // works for pointer type*** changed to safe default value
+            throw NightException("DynamicArray: invalid index access"); // works for pointer type*** changed to safe default value..Now throwing custom excption
 
         return items[index];
     }
