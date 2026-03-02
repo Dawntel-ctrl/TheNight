@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-//  NightBase is now abstract
+
 
 
 /*

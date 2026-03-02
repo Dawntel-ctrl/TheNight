@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1">
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
   <Class Name="NightBase" Collapsed="true">
     <Position X="1.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
@@ -28,18 +28,25 @@
       <FileName>NightOver.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DynamicArray&lt;T&gt;">
-    <Position X="8.5" Y="4.5" Width="1.75" />
+  <Class Name="DynamicArray&lt;T&gt;" Collapsed="true">
+    <Position X="8.25" Y="5.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAIAAAAAEAIoAAAAAAAEAAAAAAQAAAAACEAA=</HashCode>
       <FileName>NightDynamic.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NightManager" Collapsed="true">
-    <Position X="8.5" Y="3.5" Width="1.5" />
+    <Position X="8.25" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAIAEAAAUAAgAAQAAAAEAAAAAAAAACAACIAA=</HashCode>
       <FileName>NightManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NightException">
+    <Position X="8.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>NightException.h</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="NightPhase">
