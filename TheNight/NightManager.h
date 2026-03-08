@@ -8,7 +8,7 @@ private:
     DynamicArray<NightBase*> items;
 
 public:
-    //3/8
+    // recursive decloration
     int countRecursive(int index = 0) const;
   
 
