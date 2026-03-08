@@ -35,10 +35,10 @@
       <FileName>NightDynamic.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NightManager" Collapsed="true">
+  <Class Name="NightManager">
     <Position X="8.25" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAEAAAUAAgAAQAAAAEAAAAAAAAACAACIAA=</HashCode>
+      <HashCode>AAAAAAAAAIAFAAAUAAgAAQAAAAEAAAAAAAAACAACIAA=</HashCode>
       <FileName>NightManager.h</FileName>
     </TypeIdentifier>
   </Class>

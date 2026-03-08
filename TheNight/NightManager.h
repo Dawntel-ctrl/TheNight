@@ -8,7 +8,12 @@ private:
     DynamicArray<NightBase*> items;
 
 public:
-    NightManager(int cap = 4);
+    //3/8
+    int countRecursive(int index = 0) const;
+  
+
+
+   NightManager(int cap = 4);
     ~NightManager();
 
     void add(NightBase* item);

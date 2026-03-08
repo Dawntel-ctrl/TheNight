@@ -63,3 +63,13 @@ bool NightManager::isSameSize(const NightManager& other) const
 {
     return this->getSize() == other.getSize();
 }
+
+int NightManager::countRecursive(int index) const
+{
+    // Base case
+    if (index >= items.getSize())
+        return 0;
+
+    // Recursive case
+    return 1 + countRecursive(index + 1);
+}

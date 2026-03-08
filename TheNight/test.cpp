@@ -45,6 +45,7 @@ TEST_CASE("NightBase setters/getters work") {
 
 #include "NightTemplate.h"
 #include "NightDynamic.h"
+
 //dynamic test 1&2
 TEST_CASE("Class template works with int")
 {
@@ -57,6 +58,7 @@ TEST_CASE("Class template works with int")
     CHECK(arr[0] == 5);
     CHECK(arr[1] == 10);
 }
+
 TEST_CASE("Class template resize and remove")
 {
     DynamicArray<int> arr(2);
@@ -232,7 +234,7 @@ TEST_CASE("Manager operator[] returns correct item for valid index") {
 //}
 
 
-//  test FOR manager (existing functionality)
+//  test for manager (existing functionality)
 
 TEST_CASE("Manager adds items and tracks size") {
 
@@ -315,6 +317,8 @@ TEST_CASE("Derived print overrides and calls base print") {
 //  test FOR manager
 
 
+// EXTRA DUPLICATE TESTS (commented out to avoid running twice)
+/*
 TEST_CASE("Manager adds items and tracks size") {
 
     NightManager manager;
@@ -368,6 +372,8 @@ TEST_CASE("Manager printAll works polymorphically") {
     CHECK(out.find("Mars") != std::string::npos);
     CHECK(out.find("Object count: 7") != std::string::npos);
 }
+*/
+
 
 //3/1
 
@@ -398,4 +404,23 @@ TEST_CASE("DynamicArray throws on invalid access and removal")
 
     CHECK_THROWS_AS(arr[5], NightException);
     CHECK_THROWS_AS(arr.remove(5), NightException);
+}
+
+
+// 3/8 TEST RECURSION verifies recursive counting in NightManager
+TEST_CASE("NightManager recursive count works")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 2, LATE_NIGHT,
+        NightComp("Mars"), 7
+    );
+
+    manager += new NightDerived(
+        "2026-02-09", 3, LATE_NIGHT,
+        NightComp("Moon"), 8
+    );
+
+    CHECK(manager.countRecursive() == 2);
 }
