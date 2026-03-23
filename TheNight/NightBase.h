@@ -15,7 +15,10 @@ private:
     NightPhase phase;
 
 public:
-    // default constructor
+   //poly interface 3/22
+   virtual std::string getLocation() const = 0;
+   
+   // default constructor
     NightBase()
         : date(""), hour24(0), phase(DAYTIME) {
     }

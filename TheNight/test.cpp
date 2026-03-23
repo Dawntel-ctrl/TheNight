@@ -424,3 +424,35 @@ TEST_CASE("NightManager recursive count works")
 
     CHECK(manager.countRecursive() == 2);
 }
+
+// 3/22 Binary Search Test - found sortByHour, manager.binarySearchByHour()
+TEST_CASE("Binary search finds correct index after sorting")
+{
+    NightManager manager;
+
+    manager += new NightDerived("2026-02-08", 22, MID_NIGHT, NightComp("A"), 1);
+    manager += new NightDerived("2026-02-08", 18, EARLY_NIGHT, NightComp("B"), 1);
+    manager += new NightDerived("2026-02-08", 20, MID_NIGHT, NightComp("C"), 1);
+
+    manager.sortByHour();   // REQUIRED before binary search
+
+    int index = manager.binarySearchByHour(20);
+
+    CHECK(index != -1);
+    CHECK(manager[index]->getHour24() == 20);
+}
+
+// 3/20 Binary Search Test - not found sortByHour, manager.binarySearchByHour()
+TEST_CASE("Binary search returns -1 when value not found")
+{
+    NightManager manager;
+
+    manager += new NightDerived("2026-02-08", 10, EARLY_NIGHT, NightComp("A"), 1);
+    manager += new NightDerived("2026-02-08", 12, MID_NIGHT, NightComp("B"), 1);
+
+    manager.sortByHour();
+
+    int index = manager.binarySearchByHour(25);
+
+    CHECK(index == -1);
+}

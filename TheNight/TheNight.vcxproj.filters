@@ -56,5 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NightClassDiagram.cd" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

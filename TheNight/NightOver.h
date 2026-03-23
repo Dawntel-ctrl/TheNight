@@ -18,6 +18,12 @@ public:
         : NightBase(d, h, p), locationInfo(loc), isClearSky(clear) {
     }
 
+    // 3/22: required override for pure virtual getLocation() in NightBase
+    // Without this, NightOver is abstract and cannot be instantiated
+    std::string getLocation() const override {
+        return locationInfo.getLocation();
+    }
+
     void setLocationInfo(const NightComp& loc) { locationInfo = loc; }
     const NightComp& getLocationInfo() const { return locationInfo; }
 
@@ -28,12 +34,12 @@ public:
         NightBase::print(out);
 
         //  OLD VERSION
-        /*// 
+        /*//
         out << "Location empty: "
             << (locationInfo.isEmpty() ? "Yes" : "No") << "\n";
         */
 
-        //  NEW  print actual location
+        // 3/22print actual location
         out << "Location: " << locationInfo.getLocation() << "\n";
 
         out << "Clear sky: " << (isClearSky ? "Yes" : "No") << "\n";

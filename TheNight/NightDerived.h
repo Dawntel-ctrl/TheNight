@@ -3,16 +3,26 @@
 #include "NightBase.h"
 #include "NightComp.h"
 
+
 class NightDerived : public NightBase {
 private:
     NightComp locationInfo;   // composition
-    int objectCount;          // derived-only data
+    int objectCount;          // derived only data
 
 public:
-   
-   //2/22 
-    NightManager& operator+=(NightBase* item);
-    NightManager& operator-=(int index);
+
+    // NightDerived
+    std::string getLocation() const override {
+        return locationInfo.getLocation();
+    }
+
+    
+
+    //  removed invalid operator+= / operator-= declarations (they belong in NightManager, not here)
+
+   // NightManager& operator+=(NightBase* item);
+   // NightManager& operator-=(int index);
+
    //will be used for ops
     bool operator==(const NightDerived& other) const
     {
@@ -23,8 +33,8 @@ public:
             locationInfo.getLocation() == other.locationInfo.getLocation() &&
             objectCount == other.objectCount;
     }
-   
-   // default constructor
+
+    // default constructor
     NightDerived()
         : NightBase(), locationInfo(), objectCount(0) {
     }
@@ -62,4 +72,3 @@ public:
         return "NightDerived";
     }
 };
-
