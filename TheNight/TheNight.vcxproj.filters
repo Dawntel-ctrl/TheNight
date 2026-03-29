@@ -44,6 +44,9 @@
     <ClInclude Include="NightManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NightLinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="NightTemplate.h">
       <Filter>Header Files</Filter>
     </ClInclude>

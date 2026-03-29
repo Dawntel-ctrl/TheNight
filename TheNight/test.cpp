@@ -1,9 +1,9 @@
-#define RUN_TESTS
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
 
 #include "NightManager.h"
+#include "NightLinkedList.h"
 #include "NightBase.h"
 #include "NightComp.h"
 #include "NightOver.h"
@@ -74,6 +74,121 @@ TEST_CASE("Class template resize and remove")
     CHECK(arr.getSize() == 2);
     CHECK(arr[0] == 1);
     CHECK(arr[1] == 3);
+}
+
+//  Linkedlist ADT directly.
+TEST_CASE("NightLinkedList insertBack works on an empty list")
+{
+    NightLinkedList list;
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 2
+    ));
+
+    CHECK(list.getSize() == 1);
+    CHECK(list.getAt(0)->getLocation() == "Detroit");
+}
+
+TEST_CASE("NightLinkedList supports front and back insertion")
+{
+    NightLinkedList list;
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Back"), 2
+    ));
+
+    list.insertFront(new NightDerived(
+        "2026-02-08", 18, EARLY_NIGHT,
+        NightComp("Front"), 1
+    ));
+
+    CHECK(list.getSize() == 2);
+    CHECK(list.getAt(0)->getLocation() == "Front");
+    CHECK(list.getAt(1)->getLocation() == "Back");
+}
+
+TEST_CASE("NightLinkedList throws when deleting a node that does not exist")
+{
+    NightLinkedList list;
+
+    CHECK_THROWS_AS(list.removeAt(0), NightException);
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Only"), 2
+    ));
+
+    CHECK_THROWS_AS(list.removeAt(3), NightException);
+}
+
+TEST_CASE("NightLinkedList search returns -1 when location is not found")
+{
+    NightLinkedList list;
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 2
+    ));
+
+    CHECK(list.searchByLocation("Missing") == -1);
+}
+
+TEST_CASE("NightLinkedList traversal handles an empty list")
+{
+    NightLinkedList list;
+    std::ostringstream oss;
+
+    list.printAll(oss);
+
+    CHECK(oss.str() == "");
+}
+
+TEST_CASE("NightLinkedList iterator traverses each node in order")
+{
+    NightLinkedList list;
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("A"), 1
+    ));
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("B"), 2
+    ));
+
+    NightLinkedList::Iterator it = list.begin();
+
+    CHECK(it.hasCurrent() == true);
+    CHECK(it.getData()->getLocation() == "A");
+
+    it.next();
+
+    CHECK(it.hasCurrent() == true);
+    CHECK(it.getData()->getLocation() == "B");
+
+    it.next();
+
+    CHECK(it.hasCurrent() == false);
+}
+
+TEST_CASE("NightLinkedList recursive count works")
+{
+    NightLinkedList list;
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("A"), 1
+    ));
+
+    list.insertBack(new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("B"), 2
+    ));
+
+    CHECK(list.countRecursive() == 2);
 }
 
 

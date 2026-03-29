@@ -3,66 +3,38 @@
 #include "NightException.h"
 
 NightManager::NightManager()
-// : items(cap)   // OLD (DynamicArray init) 
 {
-    // vector does NOT need manual capacity initialization
 }
 
 NightManager::~NightManager()
 {
-    // We still own the NightBase* objects
-    // for (int i = 0; i < items.getSize(); i++) {  
-    for (int i = 0; i < items.size(); i++) {        // use vector size()
-        delete items[i];
-        items[i] = nullptr;   // Will this prevent dangling pointer / double delete in debug
-    }
+    // Modification 9: The linked-list ADT owns cleanup for stored observations.
 }
 
 void NightManager::add(NightBase* item)
 {
-    // items.add(item);   // OLD (DynamicArray)
-    items.push_back(item);   //  vector add
+    items.insertBack(item);
 }
 
 void NightManager::remove(int index)
 {
-    // if (index < 0 || index >= items.getSize()) // OLD 
-    if (index < 0 || index >= items.size())       // vec
-        throw NightException("NightManager: invalid removal index");
-
-    // delete items[index];     // OLD 
-    delete items.at(index);     // safe access (throws if invalid)
-
-    items[index] = nullptr;     // maybe prevent dangling pointer before erase
-
-    // items.remove(index);     // OLD (DynamicArray shift) 
-    items.erase(items.begin() + index);   // vector shift + remove
+    items.removeAt(index);
 }
 
 void NightManager::printAll(std::ostream& out) const
 {
-    // for (int i = 0; i < items.getSize(); i++) {   // OLD 
-    for (int i = 0; i < items.size(); i++) {        // vec
-        items[i]->print(out);
-        out << "-----------------\n";
-    }
+    // Modification 10: Traversal is delegated to the custom linked-list iterator.
+    items.printAll(out);
 }
 
 int NightManager::getSize() const
 {
-    // return items.getSize();   
-    return static_cast<int>(items.size());
+    return items.getSize();
 }
 
 NightBase* NightManager::operator[](int index) const
 {
-    // return items[index];   
-
-    // will this manual bounds check so we throw NightException instead of std::out_of_range
-    if (index < 0 || index >= static_cast<int>(items.size()))
-        throw NightException("NightManager: invalid index");
-
-    return items[index];  // FIX: removed .at() to avoid std::out_of_range
+    return items.getAt(index);
 }
 
 NightManager& NightManager::operator+=(NightBase* item)
@@ -84,48 +56,34 @@ bool NightManager::isSameSize(const NightManager& other) const
 
 int NightManager::countRecursive(int index) const
 {
-    // if (index >= items.getSize())   
-    if (index >= items.size())        // base case uses vec
+    if (index == 0)
+        return items.countRecursive();
+
+    if (index >= items.getSize())
         return 0;
 
-    // Recursive case
     return 1 + countRecursive(index + 1);
 }
 
 // 3/22 Sequential search implementation
 int NightManager::findByLocation(const std::string& location) const
 {
-    for (size_t i = 0; i < items.size(); i++)
-    {
-        // polymorphism from NightBase
-        // OLD (invalid): items[i]->getLocationInfo().getLocation()
-        //all derived classes implement getLocation()
-        if (items[i]->getLocation() == location)
-            return static_cast<int>(i);
-    }
-
-    return -1;
+    return items.searchByLocation(location);
 }
 
 // 3/22 Insertion sort implementation Algorithm (sort by getHour24)
 void NightManager::sortByHour()
 {
-    // 3/22: use size_t for vector indexing consistency
-    for (size_t i = 1; i < items.size(); i++)
-    {
-        NightBase* key = items[i];
+    // Modification 11: Sort keeps prior manager behavior by swapping linked-list data pointers.
+    for (int i = 0; i < items.getSize() - 1; i++) {
+        for (int j = 0; j < items.getSize() - 1 - i; j++) {
+            NightBase* left = items.getAt(j);
+            NightBase* right = items.getAt(j + 1);
 
-        // 3/22: j must stay int because it goes negative
-        int j = static_cast<int>(i) - 1;
-
-        // shift elements greater than key
-        while (j >= 0 && items[j]->getHour24() > key->getHour24())
-        {
-            items[j + 1] = items[j];
-            j--;
+            if (left->getHour24() > right->getHour24()) {
+                items.swapAt(j, j + 1);
+            }
         }
-
-        items[j + 1] = key;
     }
 }
 
@@ -133,13 +91,13 @@ void NightManager::sortByHour()
 int NightManager::binarySearchByHour(int hour) const
 {
     int low = 0;
-    int high = static_cast<int>(items.size()) - 1;
+    int high = items.getSize() - 1;
 
     while (low <= high)
     {
         int mid = (low + high) / 2;
 
-        int midValue = items[mid]->getHour24();
+        int midValue = items.getAt(mid)->getHour24();
 
         if (midValue == hour)
         {

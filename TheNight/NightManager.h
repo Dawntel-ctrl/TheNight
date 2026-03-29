@@ -1,35 +1,27 @@
 #pragma once
 
 #include "NightBase.h"
-//#include "NightDynamic.h"
-#include <vector>
+#include "NightLinkedList.h"
 #include <string>
 #include <iostream>
 
 class NightManager {
 private:
-   //replacing the dynamicArray
-  // DynamicArray<NightBase*> items;
-    std::vector<NightBase*> items;
-
-
-
-
+    //  NightManager now stores observations in a custom linked-list ADT.
+    NightLinkedList items;
 
 public:
     // 3/22 Insertion sort by hour
     void sortByHour();
-    // 3/22 Binary search (requires sorted vector)
+    // 3/22 Binary search still requires sorted data, even though list access is now sequential.
     int binarySearchByHour(int hour) const;
-   // 3/22 Sequential search (linear search)
+    // 3/22 Sequential search (linear search)
     int findByLocation(const std::string& location) const;
-    
-    // recursive decloration
+
+    // Keep the manager interface stable while the list handles recursive counting.
     int countRecursive(int index = 0) const;
-  
 
-
-   NightManager();
+    NightManager();
     ~NightManager();
 
     void add(NightBase* item);

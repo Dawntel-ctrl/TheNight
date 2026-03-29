@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
-  <Class Name="NightBase" Collapsed="true">
+  <Class Name="NightBase">
     <Position X="1.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAQAAQAAgAAAAAAAIACAAIgAAQAAAAAABABEAQAAAAA=</HashCode>
+      <HashCode>EAYAAQAAgAAAAAAAIACAAIgAAQAAAAAABABEAQAAAAA=</HashCode>
       <FileName>NightBase.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -35,12 +35,35 @@
       <FileName>NightDynamic.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NightManager">
+  <Class Name="NightManager" Collapsed="true">
     <Position X="8.25" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAFAAAUAAgAAQAAAAEAAAAAAAAACAACIAA=</HashCode>
+      <HashCode>AAAAAAAAEIAFAAAUAAgAAQAAAAEAAAAAIAAACABCIAA=</HashCode>
       <FileName>NightManager.h</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="NightLinkedList">
+    <Position X="10.25" Y="3" Width="1.75" />
+    <NestedTypes>
+      <Struct Name="NightLinkedList::Node" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>NightLinkedList.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Class Name="NightLinkedList::Iterator" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>NightLinkedList.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAgIAFAAAACIAAAQAQIAAgAAASAAAAAAiAQgA=</HashCode>
+      <FileName>NightLinkedList.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NightLinkedList::Node" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.75" />
+    <TypeIdentifier />
   </Class>
   <Class Name="NightException">
     <Position X="8.25" Y="2.25" Width="1.5" />
