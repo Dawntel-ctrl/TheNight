@@ -8,7 +8,7 @@ NightManager::NightManager()
 
 NightManager::~NightManager()
 {
-    // Modification 9: The linked-list ADT owns cleanup for stored observations.
+    // The linked list ADT owns cleanup for stored observations.
 }
 
 void NightManager::add(NightBase* item)
@@ -23,7 +23,7 @@ void NightManager::remove(int index)
 
 void NightManager::printAll(std::ostream& out) const
 {
-    // Modification 10: Traversal is delegated to the custom linked-list iterator.
+    //   Traversal is delegated to the custom linked list iterator.
     items.printAll(out);
 }
 
@@ -74,7 +74,7 @@ int NightManager::findByLocation(const std::string& location) const
 // 3/22 Insertion sort implementation Algorithm (sort by getHour24)
 void NightManager::sortByHour()
 {
-    // Modification 11: Sort keeps prior manager behavior by swapping linked-list data pointers.
+    // Sort keeps prior manager behavior by swapping linked list data pointers.
     for (int i = 0; i < items.getSize() - 1; i++) {
         for (int j = 0; j < items.getSize() - 1 - i; j++) {
             NightBase* left = items.getAt(j);
