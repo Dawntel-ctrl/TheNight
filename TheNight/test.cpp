@@ -9,7 +9,11 @@
 #include "NightOver.h"
 #include "NightDerived.h"
 #include "NightException.h"
+
 #include <sstream>
+#include <fstream>
+#include <filesystem>
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -570,4 +574,69 @@ TEST_CASE("Binary search returns -1 when value not found")
     int index = manager.binarySearchByHour(25);
 
     CHECK(index == -1);
+}
+
+// ----------------------------
+// Week 13 JSON tests
+// ----------------------------
+TEST_CASE("NightManager loads observations from JSON (valid file)")
+{
+    const std::filesystem::path path = std::filesystem::temp_directory_path() / "night_valid_observations.json";
+    std::filesystem::remove(path);
+
+    {
+        std::ofstream fout(path);
+        fout <<
+            "["
+            "{\"type\":\"NightDerived\",\"date\":\"2026-02-08\",\"hour24\":20,\"location\":\"Detroit\",\"objectCount\":2},"
+            "{\"type\":\"NightOver\",\"date\":\"2026-02-09\",\"hour24\":22,\"location\":\"NYC\",\"clearSky\":true},"
+            "{\"type\":\"NightDerived\",\"date\":\"2026-02-10\",\"hour24\":2,\"location\":\"Mars\",\"objectCount\":7},"
+            "{\"type\":\"NightOver\",\"date\":\"2026-02-11\",\"hour24\":19,\"location\":\"Hanoi\",\"clearSky\":false},"
+            "{\"type\":\"NightDerived\",\"date\":\"2026-02-12\",\"hour24\":3,\"location\":\"Moon\",\"objectCount\":8}"
+            "]";
+    }
+
+    NightManager manager;
+    std::string error;
+    const bool ok = manager.loadFromJSON(path.string(), &error);
+
+    CHECK(ok == true);
+    CHECK(error.empty() == true);
+    CHECK(manager.getSize() == 5);
+    CHECK(manager[0]->getLocation() == "Detroit");
+
+    std::filesystem::remove(path);
+}
+
+TEST_CASE("NightManager loadFromJSON returns false when file is missing")
+{
+    const std::filesystem::path missing = std::filesystem::temp_directory_path() / "night_missing.json";
+    std::filesystem::remove(missing);
+
+    NightManager manager;
+    std::string error;
+    const bool ok = manager.loadFromJSON(missing.string(), &error);
+
+    CHECK(ok == false);
+    CHECK(error.empty() == false);
+}
+
+TEST_CASE("NightManager loadFromJSON returns false when JSON is malformed")
+{
+    const std::filesystem::path path = std::filesystem::temp_directory_path() / "night_malformed.json";
+    std::filesystem::remove(path);
+
+    {
+        std::ofstream fout(path);
+        fout << "{ this is not valid json ";
+    }
+
+    NightManager manager;
+    std::string error;
+    const bool ok = manager.loadFromJSON(path.string(), &error);
+
+    CHECK(ok == false);
+    CHECK(error.empty() == false);
+
+    std::filesystem::remove(path);
 }

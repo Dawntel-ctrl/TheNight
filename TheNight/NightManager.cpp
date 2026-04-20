@@ -1,6 +1,29 @@
 #include "NightManager.h"
-#include <iostream>
+
+#include "NightDerived.h"
 #include "NightException.h"
+#include "NightOver.h"
+#include "json.hpp"
+
+#include <fstream>
+#include <iostream>
+#include <string>
+
+namespace {
+    NightPhase determinephase(int hour) {
+        if (hour >= 18 && hour <= 21) {
+            return EARLY_NIGHT;
+        }
+        if (hour >= 22 || hour <= 1) {
+            return MID_NIGHT;
+        }
+        if (hour >= 2 && hour <= 5) {
+            return LATE_NIGHT;
+        }
+
+        return DAYTIME;
+    }
+}
 
 NightManager::NightManager()
 {
@@ -9,6 +32,58 @@ NightManager::NightManager()
 NightManager::~NightManager()
 {
     // The linked list ADT owns cleanup for stored observations.
+}
+
+bool NightManager::loadFromJSON(const string& filename, string* errorMessage)
+{
+    try {
+        ifstream jsonin(filename);
+        if (!jsonin) {
+            if (errorMessage != nullptr) {
+                *errorMessage = "JSON file not found: " + filename;
+            }
+            return false;
+        }
+
+        nlohmann::json root;
+        jsonin >> root;
+
+        if (!root.is_array()) {
+            throw NightException("JSON root must be an array");
+        }
+
+        for (const auto& record : root) {
+            if (!record.is_object()) {
+                throw NightException("Json must be objects in array");
+            }
+
+            const string type = record.value("type", "NightDerived");
+            const string date = record.at("date").get<string>();
+            const int hour = record.at("hour24").get<int>();
+            const string location = record.at("location").get<string>();
+            const NightPhase phase = determinephase(hour);
+
+            if (type == "NightOver") {
+                const bool clearsky = record.value("clearSky", false);
+                add(new NightOver(date, hour, phase, NightComp(location), clearsky));
+            }
+            else if (type == "NightDerived") {
+                const int objcount = record.value("objectCount", 0);
+                add(new NightDerived(date, hour, phase, NightComp(location), objcount));
+            }
+            else {
+                throw NightException("Unknown type in JSON: " + type);
+            }
+        }
+
+        return true;
+    }
+    catch (const exception& exc) {
+        if (errorMessage != nullptr) {
+            *errorMessage = exc.what();
+        }
+        return false;
+    }
 }
 
 void NightManager::add(NightBase* item)

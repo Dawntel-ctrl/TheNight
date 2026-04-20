@@ -55,20 +55,27 @@ public:
         return "Daytime";
     }
 
+
     // DELETE OLD ARRAY-BASED FUNCTIONS (they use Observation[])
-    /*
-    double computeAverageHour(const Observation a[], int n) const { ... }
+/*
+double computeAverageHour(const Observation a[], int n) const { ... }
 
-    int countPhase(const Observation a[], int n, NightPhase p) const { ... }
+int countPhase(const Observation a[], int n, NightPhase p) const { ... }
 
-    NightPhase mostCommonPhase(int earlyCount, int midCount, int lateCount) const { ... }
-    */
+NightPhase mostCommonPhase(int earlyCount, int midCount, int lateCount) const { ... }
+*/
 
     // ----------------------------
     // PROGRAM ENTRY (NOT TESTED)
     // ----------------------------
     void run() {
         showBanner();
+
+        // Week 13 JSON: load observation data from disk into the existing linked list (NightManager).
+        std::string jsonError;
+        if (!manager.loadFromJSON("observations.json", &jsonError)) {
+            std::cout << "[Warning] JSON load failed: " << jsonError << "\n";
+        }
 
         int choice;
         do {
@@ -88,11 +95,11 @@ public:
 private:
 
     // OLD FIXED STORAGE
-    /*
-    static const int MAX_OBS = 7;
-    Observation obs[MAX_OBS];
-    int count;
-    */
+       /*
+       static const int MAX_OBS = 7;
+       Observation obs[MAX_OBS];
+       int count;
+       */
 
     // for dynamic storage
     NightManager manager;

@@ -1,0 +1,7 @@
+[
+  { "type": "NightDerived", "date": "2026-02-08", "hour24": 20, "location": "Detroit", "objectCount": 2 },
+  { "type": "NightOver",    "date": "2026-02-09", "hour24": 22, "location": "NYC",     "clearSky": true },
+  { "type": "NightDerived", "date": "2026-02-10", "hour24": 2,  "location": "Mars",    "objectCount": 7 },
+  { "type": "NightOver",    "date": "2026-02-11", "hour24": 19, "location": "Hanoi",   "clearSky": false },
+  { "type": "NightDerived", "date": "2026-02-12", "hour24": 3,  "location": "Moon",    "objectCount": 8 }
+]

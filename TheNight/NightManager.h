@@ -4,7 +4,7 @@
 #include "NightLinkedList.h"
 #include <string>
 #include <iostream>
-
+using namespace std;
 class NightManager {
 private:
     //  NightManager now stores observations in a custom linked-list ADT.
@@ -37,4 +37,7 @@ public:
     NightManager& operator-=(int index);
 
     bool isSameSize(const NightManager& other) const;
+
+    // Week 13 JSON: load observation data from disk into the existing linked list.
+    bool loadFromJSON(const string& filename, string* errorMessage = nullptr);
 };
