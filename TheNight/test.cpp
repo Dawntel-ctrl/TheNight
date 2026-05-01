@@ -9,7 +9,10 @@
 #include "NightOver.h"
 #include "NightDerived.h"
 #include "NightException.h"
+#include "NightStack.h"
+#include "NightQueue.h"
 #include <sstream>
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -570,4 +573,198 @@ TEST_CASE("Binary search returns -1 when value not found")
     int index = manager.binarySearchByHour(25);
 
     CHECK(index == -1);
+}
+
+
+// Stack Tests
+
+TEST_CASE("NightStack push, pop, peek, and isEmpty work")
+{
+    NightComp loc1("Stack One");
+    NightComp loc2("Stack Two");
+
+    NightDerived first("2026-02-08", 20, EARLY_NIGHT, loc1, 1);
+    NightDerived second("2026-02-08", 22, MID_NIGHT, loc2, 2);
+
+    NightStack stack(3);
+
+    CHECK(stack.isEmpty() == true);
+
+    stack.push(&first);
+    stack.push(&second);
+
+    CHECK(stack.isEmpty() == false);
+    CHECK(stack.getSize() == 2);
+    CHECK(stack.peek()->getLocation() == "Stack Two");
+
+    CHECK(stack.pop()->getLocation() == "Stack Two");
+    CHECK(stack.pop()->getLocation() == "Stack One");
+
+    CHECK(stack.isEmpty() == true);
+}
+
+TEST_CASE("NightStack throws when pushing to a full stack")
+{
+    NightComp loc1("Full One");
+    NightComp loc2("Full Two");
+    NightComp loc3("Full Three");
+
+    NightDerived first("2026-02-08", 20, EARLY_NIGHT, loc1, 1);
+    NightDerived second("2026-02-08", 21, MID_NIGHT, loc2, 2);
+    NightDerived third("2026-02-08", 22, MID_NIGHT, loc3, 3);
+
+    NightStack stack(2);
+
+    stack.push(&first);
+    stack.push(&second);
+
+    CHECK_THROWS_AS(stack.push(&third), NightException);
+}
+
+TEST_CASE("NightStack throws when popping or peeking from an empty stack")
+{
+    NightStack stack(2);
+
+    CHECK_THROWS_AS(stack.pop(), NightException);
+    CHECK_THROWS_AS(stack.peek(), NightException);
+}
+
+
+// Queue Tests
+
+TEST_CASE("NightQueue enqueue, dequeue, front, and isEmpty work")
+{
+    NightComp loc1("Queue One");
+    NightComp loc2("Queue Two");
+
+    NightDerived first("2026-02-08", 20, EARLY_NIGHT, loc1, 1);
+    NightDerived second("2026-02-08", 22, MID_NIGHT, loc2, 2);
+
+    NightQueue queue(3);
+
+    CHECK(queue.isEmpty() == true);
+
+    queue.enqueue(&first);
+    queue.enqueue(&second);
+
+    CHECK(queue.isEmpty() == false);
+    CHECK(queue.getSize() == 2);
+    CHECK(queue.front()->getLocation() == "Queue One");
+
+    CHECK(queue.dequeue()->getLocation() == "Queue One");
+    CHECK(queue.front()->getLocation() == "Queue Two");
+    CHECK(queue.dequeue()->getLocation() == "Queue Two");
+
+    CHECK(queue.isEmpty() == true);
+}
+
+TEST_CASE("NightQueue throws when enqueueing into a full queue")
+{
+    NightComp loc1("Full Queue One");
+    NightComp loc2("Full Queue Two");
+    NightComp loc3("Full Queue Three");
+
+    NightDerived first("2026-02-08", 20, EARLY_NIGHT, loc1, 1);
+    NightDerived second("2026-02-08", 21, MID_NIGHT, loc2, 2);
+    NightDerived third("2026-02-08", 22, MID_NIGHT, loc3, 3);
+
+    NightQueue queue(2);
+
+    queue.enqueue(&first);
+    queue.enqueue(&second);
+
+    CHECK_THROWS_AS(queue.enqueue(&third), NightException);
+}
+
+TEST_CASE("NightQueue throws when dequeuing or viewing front from an empty queue")
+{
+    NightQueue queue(2);
+
+    CHECK_THROWS_AS(queue.dequeue(), NightException);
+    CHECK_THROWS_AS(queue.front(), NightException);
+}
+
+TEST_CASE("NightQueue circular behavior works after dequeue")
+{
+    NightComp loc1("Circular One");
+    NightComp loc2("Circular Two");
+    NightComp loc3("Circular Three");
+    NightComp loc4("Circular Four");
+
+    NightDerived first("2026-02-08", 20, EARLY_NIGHT, loc1, 1);
+    NightDerived second("2026-02-08", 21, MID_NIGHT, loc2, 2);
+    NightDerived third("2026-02-08", 22, MID_NIGHT, loc3, 3);
+    NightDerived fourth("2026-02-08", 23, MID_NIGHT, loc4, 4);
+
+    NightQueue queue(3);
+
+    queue.enqueue(&first);
+    queue.enqueue(&second);
+    queue.enqueue(&third);
+
+    CHECK(queue.dequeue()->getLocation() == "Circular One");
+
+    queue.enqueue(&fourth);
+
+    CHECK(queue.dequeue()->getLocation() == "Circular Two");
+    CHECK(queue.dequeue()->getLocation() == "Circular Three");
+    CHECK(queue.dequeue()->getLocation() == "Circular Four");
+    CHECK(queue.isEmpty() == true);
+}
+
+
+// Manager Integration Tests
+
+TEST_CASE("NightManager printNewestFirst uses stack to reverse order")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("First"), 1
+    );
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("Second"), 2
+    );
+
+    std::ostringstream oss;
+    manager.printNewestFirst(oss);
+
+    std::string out = oss.str();
+
+    size_t secondPos = out.find("Second");
+    size_t firstPos = out.find("First");
+
+    CHECK(secondPos != std::string::npos);
+    CHECK(firstPos != std::string::npos);
+    CHECK(secondPos < firstPos);
+}
+
+TEST_CASE("NightManager printReviewQueue uses queue to preserve original order")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("First"), 1
+    );
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("Second"), 2
+    );
+
+    std::ostringstream oss;
+    manager.printReviewQueue(oss);
+
+    std::string out = oss.str();
+
+    size_t firstPos = out.find("First");
+    size_t secondPos = out.find("Second");
+
+    CHECK(firstPos != std::string::npos);
+    CHECK(secondPos != std::string::npos);
+    CHECK(firstPos < secondPos);
 }

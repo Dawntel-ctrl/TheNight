@@ -115,3 +115,47 @@ int NightManager::binarySearchByHour(int hour) const
 
     return -1;  // not found
 }
+
+// The stack reverses the linked list order so the newest observation prints first.
+void NightManager::printNewestFirst(std::ostream& out) const
+{
+    if (items.isEmpty())
+        return;
+
+    NightStack stack(items.getSize());
+
+    for (int i = 0; i < items.getSize(); i++) {
+        stack.push(items.getAt(i));
+    }
+
+    while (!stack.isEmpty()) {
+        NightBase* current = stack.pop();
+
+        if (current != nullptr) {
+            current->print(out);
+            out << "-----------------\n";
+        }
+    }
+}
+
+// The queue preserves the linked list order so observations are reviewed first-in, first-out.
+void NightManager::printReviewQueue(std::ostream& out) const
+{
+    if (items.isEmpty())
+        return;
+
+    NightQueue queue(items.getSize());
+
+    for (int i = 0; i < items.getSize(); i++) {
+        queue.enqueue(items.getAt(i));
+    }
+
+    while (!queue.isEmpty()) {
+        NightBase* current = queue.dequeue();
+
+        if (current != nullptr) {
+            current->print(out);
+            out << "-----------------\n";
+        }
+    }
+}
