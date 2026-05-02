@@ -106,7 +106,7 @@ int NightManager::findByLocation(const std::string& location) const
     return locationMap.lookupLocation(location);
 }
 
-// Week 12 map delete use
+// STL map delete use
 int NightManager::removeByLocation(const std::string& location)
 {
     int index = findByLocation(location);
@@ -118,7 +118,7 @@ int NightManager::removeByLocation(const std::string& location)
     return index;
 }
 
-// Week 12 map iteration use
+// STL map iteration use
 void NightManager::printLocationIndexMap(std::ostream& out) const
 {
     locationMap.printAll(out);
