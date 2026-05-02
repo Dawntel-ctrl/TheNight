@@ -11,6 +11,7 @@
 #include "NightException.h"
 #include "NightStack.h"
 #include "NightQueue.h"
+#include "NightLocationMap.h"
 #include <sstream>
 
 #define _CRTDBG_MAP_ALLOC
@@ -767,4 +768,204 @@ TEST_CASE("NightManager printReviewQueue uses queue to preserve original order")
     CHECK(firstPos != std::string::npos);
     CHECK(secondPos != std::string::npos);
     CHECK(firstPos < secondPos);
+}
+
+
+// STL Map Header Tests
+
+TEST_CASE("NightLocationMap inserts and looks up location indexes")
+{
+    NightLocationMap map;
+
+    map.insertLocation("Detroit", 0);
+    map.insertLocation("NYC", 1);
+
+    CHECK(map.getSize() == 2);
+    CHECK(map.lookupLocation("Detroit") == 0);
+    CHECK(map.lookupLocation("NYC") == 1);
+}
+
+TEST_CASE("NightLocationMap lookup returns -1 when key does not exist")
+{
+    NightLocationMap map;
+
+    map.insertLocation("Detroit", 0);
+
+    CHECK(map.lookupLocation("Missing") == -1);
+}
+
+TEST_CASE("NightLocationMap deletes existing location")
+{
+    NightLocationMap map;
+
+    map.insertLocation("Detroit", 0);
+    map.insertLocation("NYC", 1);
+
+    CHECK(map.deleteLocation("Detroit") == true);
+    CHECK(map.lookupLocation("Detroit") == -1);
+    CHECK(map.getSize() == 1);
+}
+
+TEST_CASE("NightLocationMap delete returns false when key does not exist")
+{
+    NightLocationMap map;
+
+    map.insertLocation("Detroit", 0);
+
+    CHECK(map.deleteLocation("Missing") == false);
+    CHECK(map.getSize() == 1);
+}
+
+TEST_CASE("NightLocationMap iterates and prints all key value pairs")
+{
+    NightLocationMap map;
+
+    map.insertLocation("Detroit", 0);
+    map.insertLocation("NYC", 1);
+
+    std::ostringstream oss;
+    map.printAll(oss);
+
+    std::string out = oss.str();
+
+    CHECK(out.find("Detroit: 0") != std::string::npos);
+    CHECK(out.find("NYC: 1") != std::string::npos);
+}
+
+
+// Manager STL Map Integration Tests
+
+TEST_CASE("NightManager STL map inserts and looks up locations")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 1
+    );
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("NYC"), 2
+    );
+
+    CHECK(manager.getLocationMapSize() == 2);
+    CHECK(manager.findByLocation("Detroit") == 0);
+    CHECK(manager.findByLocation("NYC") == 1);
+}
+
+TEST_CASE("NightManager STL map lookup returns -1 when location does not exist")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 1
+    );
+
+    CHECK(manager.findByLocation("Missing") == -1);
+}
+
+TEST_CASE("NightManager STL map deletes location through removeByLocation")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 1
+    );
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("NYC"), 2
+    );
+
+    int removedIndex = manager.removeByLocation("Detroit");
+
+    CHECK(removedIndex == 0);
+    CHECK(manager.getSize() == 1);
+    CHECK(manager.getLocationMapSize() == 1);
+    CHECK(manager.findByLocation("Detroit") == -1);
+    CHECK(manager.findByLocation("NYC") == 0);
+}
+
+TEST_CASE("NightManager STL map delete returns -1 when location does not exist")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 1
+    );
+
+    int removedIndex = manager.removeByLocation("Missing");
+
+    CHECK(removedIndex == -1);
+    CHECK(manager.getSize() == 1);
+    CHECK(manager.getLocationMapSize() == 1);
+}
+
+TEST_CASE("NightManager STL map iterates and prints all key value pairs")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Detroit"), 1
+    );
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("NYC"), 2
+    );
+
+    std::ostringstream oss;
+    manager.printLocationIndexMap(oss);
+
+    std::string out = oss.str();
+
+    CHECK(out.find("Detroit: 0") != std::string::npos);
+    CHECK(out.find("NYC: 1") != std::string::npos);
+}
+
+TEST_CASE("NightManager STL map rebuilds indexes after sorting")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("Late"), 1
+    );
+
+    manager += new NightDerived(
+        "2026-02-08", 18, EARLY_NIGHT,
+        NightComp("Early"), 2
+    );
+
+    CHECK(manager.findByLocation("Late") == 0);
+    CHECK(manager.findByLocation("Early") == 1);
+
+    manager.sortByHour();
+
+    CHECK(manager.findByLocation("Early") == 0);
+    CHECK(manager.findByLocation("Late") == 1);
+}
+
+TEST_CASE("NightManager STL map keeps first index for duplicate locations")
+{
+    NightManager manager;
+
+    manager += new NightDerived(
+        "2026-02-08", 20, EARLY_NIGHT,
+        NightComp("Duplicate"), 1
+    );
+
+    manager += new NightDerived(
+        "2026-02-08", 22, MID_NIGHT,
+        NightComp("Duplicate"), 2
+    );
+
+    CHECK(manager.getSize() == 2);
+    CHECK(manager.getLocationMapSize() == 1);
+    CHECK(manager.findByLocation("Duplicate") == 0);
 }
