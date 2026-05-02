@@ -11,14 +11,49 @@ NightManager::~NightManager()
     // The linked list ADT owns cleanup for stored observations.
 }
 
+// STL map insert helper
+void NightManager::insertLocationIndex(NightBase* item, int index)
+{
+    if (item == nullptr)
+        return;
+
+    locationMap.insertLocation(item->getLocation(), index);
+}
+
+// STL map rebuild helper
+void NightManager::rebuildLocationIndexMap()
+{
+    locationMap.clear();
+
+    for (int i = 0; i < items.getSize(); i++) {
+        insertLocationIndex(items.getAt(i), i);
+    }
+}
+
 void NightManager::add(NightBase* item)
 {
+    int newIndex = items.getSize();
+
     items.insertBack(item);
+
+    // STL map insert operation
+    locationMap.insertLocation(item->getLocation(), newIndex);
 }
 
 void NightManager::remove(int index)
 {
+    // Get the location first so the map can delete that key before the item is removed.
+    NightBase* target = items.getAt(index);
+
+    if (target != nullptr) {
+        // STL map delete operation
+        locationMap.deleteLocation(target->getLocation());
+    }
+
     items.removeAt(index);
+
+    // Indexes may have shifted, so rebuild the map.
+    rebuildLocationIndexMap();
 }
 
 void NightManager::printAll(std::ostream& out) const
@@ -65,10 +100,33 @@ int NightManager::countRecursive(int index) const
     return 1 + countRecursive(index + 1);
 }
 
-// 3/22 Sequential search implementation
+// 3/22 Sequential search enhanced by STL map.
 int NightManager::findByLocation(const std::string& location) const
 {
-    return items.searchByLocation(location);
+    return locationMap.lookupLocation(location);
+}
+
+// Week 12 map delete use
+int NightManager::removeByLocation(const std::string& location)
+{
+    int index = findByLocation(location);
+
+    if (index == -1)
+        return -1;
+
+    remove(index);
+    return index;
+}
+
+// Week 12 map iteration use
+void NightManager::printLocationIndexMap(std::ostream& out) const
+{
+    locationMap.printAll(out);
+}
+
+int NightManager::getLocationMapSize() const
+{
+    return locationMap.getSize();
 }
 
 // 3/22 Insertion sort implementation Algorithm (sort by getHour24)
@@ -85,6 +143,9 @@ void NightManager::sortByHour()
             }
         }
     }
+
+    // Sorting changes indexes, so the map must be rebuilt.
+    rebuildLocationIndexMap();
 }
 
 // 3/22 Binary Search implementation (search by getHour24)

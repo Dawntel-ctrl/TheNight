@@ -56,6 +56,15 @@
     <ClInclude Include="NightException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NightQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightLocationMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="NightClassDiagram.cd" />

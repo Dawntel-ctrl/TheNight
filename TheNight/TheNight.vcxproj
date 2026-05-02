@@ -138,6 +138,7 @@
     <ClInclude Include="NightDynamic.h" />
     <ClInclude Include="NightException.h" />
     <ClInclude Include="NightLinkedList.h" />
+    <ClInclude Include="NightLocationMap.h" />
     <ClInclude Include="NightManager.h" />
     <ClInclude Include="NightBase.h" />
     <ClInclude Include="NightComp.h" />
