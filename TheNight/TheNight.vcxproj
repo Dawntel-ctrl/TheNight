@@ -135,8 +135,10 @@
     <ClCompile Include="TheNight.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="NightDynamic.h" />
     <ClInclude Include="NightException.h" />
+    <ClInclude Include="NightJsonLoader.h" />
     <ClInclude Include="NightLinkedList.h" />
     <ClInclude Include="NightLocationMap.h" />
     <ClInclude Include="NightManager.h" />
@@ -152,6 +154,7 @@
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="NightClassDiagram.cd" />
+    <None Include="NightObservations.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,7 @@
+[
+  { "date": "2026-02-08", "hour24": 20, "phase": "EARLY_NIGHT", "location": "Detroit", "objectCount": 2 },
+  { "date": "2026-02-08", "hour24": 22, "phase": "MID_NIGHT", "location": "NYC", "objectCount": 4 },
+  { "date": "2026-02-09", "hour24": 1, "phase": "LATE_NIGHT", "location": "Moon", "objectCount": 7 },
+  { "date": "2026-02-09", "hour24": 3, "phase": "LATE_NIGHT", "location": "Mars", "objectCount": 9 },
+  { "date": "2026-02-10", "hour24": 18, "phase": "EARLY_NIGHT", "location": "Wayne State", "objectCount": 5 }
+]
