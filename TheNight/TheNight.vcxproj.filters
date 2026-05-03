@@ -65,9 +65,18 @@
     <ClInclude Include="NightLocationMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NightJsonLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="NightClassDiagram.cd" />
     <None Include="cpp.hint" />
+    <None Include="NightObservations.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

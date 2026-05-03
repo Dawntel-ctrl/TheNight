@@ -12,7 +12,10 @@
 #include "NightStack.h"
 #include "NightQueue.h"
 #include "NightLocationMap.h"
+#include "NightJsonLoader.h"
 #include <sstream>
+#include <fstream>
+#include <cstdio>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -968,4 +971,108 @@ TEST_CASE("NightManager STL map keeps first index for duplicate locations")
     CHECK(manager.getSize() == 2);
     CHECK(manager.getLocationMapSize() == 1);
     CHECK(manager.findByLocation("Duplicate") == 0);
+}
+
+
+// JSON Loader Tests
+
+TEST_CASE("NightManager loads observations from a JSON file through NightJsonLoader")
+{
+    const std::string fileName = "test_night_observations.json";
+
+    std::ofstream output(fileName);
+
+    output << R"([
+        { "date": "2026-02-08", "hour24": 20, "phase": "EARLY_NIGHT", "location": "Detroit", "objectCount": 2 },
+        { "date": "2026-02-08", "hour24": 22, "phase": "MID_NIGHT", "location": "NYC", "objectCount": 4 },
+        { "date": "2026-02-09", "hour24": 1, "phase": "LATE_NIGHT", "location": "Moon", "objectCount": 7 },
+        { "date": "2026-02-09", "hour24": 3, "phase": "LATE_NIGHT", "location": "Mars", "objectCount": 9 },
+        { "date": "2026-02-10", "hour24": 18, "phase": "EARLY_NIGHT", "location": "Wayne State", "objectCount": 5 }
+    ])";
+
+    output.close();
+
+    NightManager manager;
+
+    int loadedCount = manager.loadFromJsonFile(fileName);
+
+    CHECK(loadedCount == 5);
+    CHECK(manager.getSize() == 5);
+    CHECK(manager.getLocationMapSize() == 5);
+
+    CHECK(manager.findByLocation("Detroit") == 0);
+    CHECK(manager.findByLocation("NYC") == 1);
+    CHECK(manager.findByLocation("Moon") == 2);
+    CHECK(manager.findByLocation("Mars") == 3);
+    CHECK(manager.findByLocation("Wayne State") == 4);
+
+    std::remove(fileName.c_str());
+}
+
+TEST_CASE("NightManager JSON loader returns -1 when file is missing")
+{
+    NightManager manager;
+
+    int loadedCount = manager.loadFromJsonFile("missing_night_file.json");
+
+    CHECK(loadedCount == -1);
+    CHECK(manager.getSize() == 0);
+    CHECK(manager.getLocationMapSize() == 0);
+}
+
+TEST_CASE("NightManager JSON loader returns -1 when JSON is malformed")
+{
+    const std::string fileName = "bad_night_observations.json";
+
+    std::ofstream output(fileName);
+
+    output << R"([
+        { "date": "2026-02-08", "hour24": 20, "phase": "EARLY_NIGHT", "location": "Detroit", "objectCount": 2 },
+    )";
+
+    output.close();
+
+    NightManager manager;
+
+    int loadedCount = manager.loadFromJsonFile(fileName);
+
+    CHECK(loadedCount == -1);
+    CHECK(manager.getSize() == 0);
+    CHECK(manager.getLocationMapSize() == 0);
+
+    std::remove(fileName.c_str());
+}
+
+TEST_CASE("NightManager JSON loaded data works with existing printAll")
+{
+    const std::string fileName = "print_night_observations.json";
+
+    std::ofstream output(fileName);
+
+    output << R"([
+        { "date": "2026-02-08", "hour24": 20, "phase": "EARLY_NIGHT", "location": "Detroit", "objectCount": 2 },
+        { "date": "2026-02-08", "hour24": 22, "phase": "MID_NIGHT", "location": "NYC", "objectCount": 4 },
+        { "date": "2026-02-09", "hour24": 1, "phase": "LATE_NIGHT", "location": "Moon", "objectCount": 7 },
+        { "date": "2026-02-09", "hour24": 3, "phase": "LATE_NIGHT", "location": "Mars", "objectCount": 9 },
+        { "date": "2026-02-10", "hour24": 18, "phase": "EARLY_NIGHT", "location": "Wayne State", "objectCount": 5 }
+    ])";
+
+    output.close();
+
+    NightManager manager;
+
+    CHECK(manager.loadFromJsonFile(fileName) == 5);
+
+    std::ostringstream oss;
+    manager.printAll(oss);
+
+    std::string out = oss.str();
+
+    CHECK(out.find("Detroit") != std::string::npos);
+    CHECK(out.find("NYC") != std::string::npos);
+    CHECK(out.find("Moon") != std::string::npos);
+    CHECK(out.find("Mars") != std::string::npos);
+    CHECK(out.find("Wayne State") != std::string::npos);
+
+    std::remove(fileName.c_str());
 }

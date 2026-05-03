@@ -1,4 +1,5 @@
 #include "NightManager.h"
+#include "NightJsonLoader.h"
 #include <iostream>
 #include "NightException.h"
 
@@ -9,6 +10,12 @@ NightManager::NightManager()
 NightManager::~NightManager()
 {
     // The linked list ADT owns cleanup for stored observations.
+}
+
+// NightManager exposes this function so the existing program can load JSON data.
+int NightManager::loadFromJsonFile(const std::string& fileName)
+{
+    return NightJsonLoader::loadFromJsonFile(*this, fileName);
 }
 
 // STL map insert helper

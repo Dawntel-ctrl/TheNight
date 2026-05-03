@@ -23,6 +23,9 @@ private:
     void rebuildLocationIndexMap();
 
 public:
+    // This function lets NightManager load data from a JSON file.
+    int loadFromJsonFile(const std::string& fileName);
+
     // 3/22 Insertion sort by hour
     void sortByHour();
 
