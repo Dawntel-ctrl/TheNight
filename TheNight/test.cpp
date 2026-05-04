@@ -12,7 +12,7 @@
 #include "NightStack.h"
 #include "NightQueue.h"
 #include "NightLocationMap.h"
-#include "NightJsonLoader.h"
+#include "NightJSONLoader.h"
 #include <sstream>
 #include <fstream>
 #include <cstdio>
@@ -976,7 +976,7 @@ TEST_CASE("NightManager STL map keeps first index for duplicate locations")
 
 // JSON Loader Tests
 
-TEST_CASE("NightManager loads observations from a JSON file through NightJsonLoader")
+TEST_CASE("NightManager loads observations from a JSON file through NightJSONLoader")
 {
     const std::string fileName = "test_night_observations.json";
 
@@ -994,7 +994,7 @@ TEST_CASE("NightManager loads observations from a JSON file through NightJsonLoa
 
     NightManager manager;
 
-    int loadedCount = manager.loadFromJsonFile(fileName);
+    int loadedCount = manager.loadFromJSONFile(fileName);
 
     CHECK(loadedCount == 5);
     CHECK(manager.getSize() == 5);
@@ -1013,7 +1013,7 @@ TEST_CASE("NightManager JSON loader returns -1 when file is missing")
 {
     NightManager manager;
 
-    int loadedCount = manager.loadFromJsonFile("missing_night_file.json");
+    int loadedCount = manager.loadFromJSONFile("missing_night_file.json");
 
     CHECK(loadedCount == -1);
     CHECK(manager.getSize() == 0);
@@ -1034,7 +1034,7 @@ TEST_CASE("NightManager JSON loader returns -1 when JSON is malformed")
 
     NightManager manager;
 
-    int loadedCount = manager.loadFromJsonFile(fileName);
+    int loadedCount = manager.loadFromJSONFile(fileName);
 
     CHECK(loadedCount == -1);
     CHECK(manager.getSize() == 0);
@@ -1061,7 +1061,7 @@ TEST_CASE("NightManager JSON loaded data works with existing printAll")
 
     NightManager manager;
 
-    CHECK(manager.loadFromJsonFile(fileName) == 5);
+    CHECK(manager.loadFromJSONFile(fileName) == 5);
 
     std::ostringstream oss;
     manager.printAll(oss);

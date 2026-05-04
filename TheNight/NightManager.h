@@ -24,7 +24,7 @@ private:
 
 public:
     // This function lets NightManager load data from a JSON file.
-    int loadFromJsonFile(const std::string& fileName);
+    int loadFromJSONFile(const std::string& fileName);
 
     // 3/22 Insertion sort by hour
     void sortByHour();

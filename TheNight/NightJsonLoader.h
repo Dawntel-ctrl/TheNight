@@ -10,22 +10,22 @@
 #include <string>
 
 // JSON loader helper
-class NightJsonLoader {
+class NightJSONLoader {
 public:
     // This class keeps the JSON parsing separate from NightManager.
-    static int loadFromJsonFile(NightManager& manager, const std::string& fileName)
+    static int loadFromJSONFile(NightManager& manager, const std::string& fileName)
     {
         try {
             std::ifstream input(fileName);
 
             if (!input.is_open())
-                throw NightException("NightJsonLoader: JSON file not found");
+                throw NightException("NightJSONLoader: JSON file not found");
 
             nlohmann::json data;
             input >> data;
 
             if (!data.is_array())
-                throw NightException("NightJsonLoader: JSON root must be an array");
+                throw NightException("NightJSONLoader: JSON root must be an array");
 
             int loadedCount = 0;
 
