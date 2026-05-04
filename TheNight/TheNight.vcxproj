@@ -138,7 +138,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="NightDynamic.h" />
     <ClInclude Include="NightException.h" />
-    <ClInclude Include="NightJsonLoader.h" />
+    <ClInclude Include="NightJSONLoader.h" />
     <ClInclude Include="NightLinkedList.h" />
     <ClInclude Include="NightLocationMap.h" />
     <ClInclude Include="NightManager.h" />

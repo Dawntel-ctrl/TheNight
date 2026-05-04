@@ -1,5 +1,5 @@
 #include "NightManager.h"
-#include "NightJsonLoader.h"
+#include "NightJSONLoader.h"
 #include <iostream>
 #include "NightException.h"
 
@@ -13,9 +13,9 @@ NightManager::~NightManager()
 }
 
 // NightManager exposes this function so the existing program can load JSON data.
-int NightManager::loadFromJsonFile(const std::string& fileName)
+int NightManager::loadFromJSONFile(const std::string& fileName)
 {
-    return NightJsonLoader::loadFromJsonFile(*this, fileName);
+    return NightJSONLoader::loadFromJSONFile(*this, fileName);
 }
 
 // STL map insert helper
