@@ -26,6 +26,16 @@ public:
     // This function lets NightManager load data from a JSON file.
     int loadFromJSONFile(const std::string& fileName);
 
+    // Loads trivia questions from api.macomb.io into the existing NightManager.
+    int loadTriviaFromAPI(
+        const std::string& category,
+        const std::string& difficulty,
+        int count
+    );
+
+    // Adds a sample trivia question to the server and displays the assigned ID.
+    int POSTSampleTriviaQuestion(std::ostream& out);
+
     // 3/22 Insertion sort by hour
     void sortByHour();
 

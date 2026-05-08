@@ -1,5 +1,6 @@
 #include "NightManager.h"
 #include "NightJSONLoader.h"
+#include "NightTriviaAPIClient.h"
 #include <iostream>
 #include "NightException.h"
 
@@ -16,6 +17,27 @@ NightManager::~NightManager()
 int NightManager::loadFromJSONFile(const std::string& fileName)
 {
     return NightJSONLoader::loadFromJSONFile(*this, fileName);
+}
+
+// NightManager exposes this function, but the HTTP and JSON parsing logic is separated into NightTriviaAPIClient.h.
+int NightManager::loadTriviaFromAPI(
+    const std::string& category,
+    const std::string& difficulty,
+    int count
+)
+{
+    return NightTriviaAPIClient::loadTriviaFromAPI(
+        *this,
+        category,
+        difficulty,
+        count
+    );
+}
+
+// Sends a sample trivia question to the server and prints the assigned ID.
+int NightManager::POSTSampleTriviaQuestion(std::ostream& out)
+{
+    return NightTriviaAPIClient::POSTSampleQuestion(out);
 }
 
 // STL map insert helper

@@ -135,6 +135,7 @@
     <ClCompile Include="TheNight.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HttpClient.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="NightDynamic.h" />
     <ClInclude Include="NightException.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="NightQueue.h" />
     <ClInclude Include="NightStack.h" />
     <ClInclude Include="NightTemplate.h" />
+    <ClInclude Include="NightTriviaAPIClient.h" />
     <ClInclude Include="TheNight.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,56 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
   <Class Name="NightBase">
-    <Position X="1.75" Y="3.25" Width="1.5" />
+    <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAYAAQAAgAAAAAAAIACAAIgAAQAAAAAABABEAQAAAAA=</HashCode>
       <FileName>NightBase.h</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="phase" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="NightComp" Collapsed="true">
-    <Position X="6" Y="3.25" Width="1.5" />
+  <Class Name="NightComp">
+    <Position X="4" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAAAAAAAAKACAAAAAAAAAAAAAAQAA=</HashCode>
       <FileName>NightComp.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NightDerived" Collapsed="true">
-    <Position X="6.5" Y="5.25" Width="1.5" />
+  <Class Name="NightDerived">
+    <Position X="5.25" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gCYICgAAAAAAAAAAAAAAAQgAAQAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>NightDerived.h</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="locationInfo" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="NightOver" Collapsed="true">
-    <Position X="1.75" Y="5" Width="1.5" />
+  <Class Name="NightOver">
+    <Position X="2.75" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAYoAAAAAAAAAABEAAAAAAAAAQAAAAAAAAAAAAAABAA=</HashCode>
       <FileName>NightOver.h</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="locationInfo" />
+    </ShowAsAssociation>
   </Class>
-  <Class Name="DynamicArray&lt;T&gt;" Collapsed="true">
-    <Position X="8.25" Y="5.25" Width="1.75" />
+  <Class Name="DynamicArray&lt;T&gt;">
+    <Position X="11.5" Y="0.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAIAAAAAEAIoAAAAAAAEAAAAAAQAAAAACEAA=</HashCode>
       <FileName>NightDynamic.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NightManager" Collapsed="true">
-    <Position X="8.25" Y="4" Width="1.5" />
+  <Class Name="NightManager">
+    <Position X="7" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAEIAFAAAUAAgAAQAAAAEAAAAAIAAACABCIAA=</HashCode>
+      <HashCode>IAAAQAAAEIAFCGAUIAgAAQAAAAEAABAEIAAECAhCIAE=</HashCode>
       <FileName>NightManager.h</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="items" />
+      <Field Name="locationMap" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="NightLinkedList">
-    <Position X="10.25" Y="3" Width="1.75" />
+    <Position X="7" Y="8.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
     <NestedTypes>
-      <Struct Name="NightLinkedList::Node" Collapsed="true">
+      <Struct Name="NightLinkedList::Node">
         <TypeIdentifier>
           <NewMemberFileName>NightLinkedList.h</NewMemberFileName>
         </TypeIdentifier>
       </Struct>
-      <Class Name="NightLinkedList::Iterator" Collapsed="true">
+      <Class Name="NightLinkedList::Iterator">
         <TypeIdentifier>
           <NewMemberFileName>NightLinkedList.h</NewMemberFileName>
         </TypeIdentifier>
@@ -62,18 +78,35 @@
     </TypeIdentifier>
   </Class>
   <Class Name="NightLinkedList::Node" Collapsed="true">
-    <Position X="12.25" Y="3.5" Width="1.75" />
+    <Position X="11.5" Y="4" Width="1.75" />
     <TypeIdentifier />
   </Class>
   <Class Name="NightException">
-    <Position X="8.25" Y="2.25" Width="1.5" />
+    <Position X="9.75" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
       <FileName>NightException.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="NightLocationMap">
+    <Position X="9.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAIAEAAAAgAAEAAAAAAAAACAAAgAAQAAAQCA=</HashCode>
+      <FileName>NightLocationMap.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="locationIndexMap" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="std::map&lt;_Kty, _Ty, _Pr, _Alloc&gt;">
+    <Position X="9.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAABAAACwAAAAAAAAAAEBBAABgQAgAAAAAAA=</HashCode>
+      <FileName>C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\map</FileName>
+    </TypeIdentifier>
+  </Class>
   <Enum Name="NightPhase">
-    <Position X="4" Y="3.25" Width="1.5" />
+    <Position X="7" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAEAAAAAACABAAAAAAAA=</HashCode>
       <FileName>NightBase.h</FileName>

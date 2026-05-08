@@ -13,9 +13,11 @@
 #include "NightQueue.h"
 #include "NightLocationMap.h"
 #include "NightJSONLoader.h"
+#include "NightTriviaAPIClient.h"
 #include <sstream>
 #include <fstream>
 #include <cstdio>
+#include <string>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -1075,4 +1077,153 @@ TEST_CASE("NightManager JSON loaded data works with existing printAll")
     CHECK(out.find("Wayne State") != std::string::npos);
 
     std::remove(fileName.c_str());
+}
+
+
+// REST API Trivia Tests
+
+TEST_CASE("NightTriviaAPIClient parses trivia GET JSON into NightManager")
+{
+    std::string response = R"({
+        "count": 2,
+        "questions": [
+            {
+                "id": 4,
+                "category": "programming",
+                "difficulty": "medium",
+                "question": "What is the output of: int x = 5; cout << x++;",
+                "answer": "5",
+                "choices": [ "6", "Undefined", "5", "4" ]
+            },
+            {
+                "id": 14,
+                "category": "math",
+                "difficulty": "medium",
+                "question": "What is the sum of angles in a triangle?",
+                "answer": "180 degrees",
+                "choices": [ "180 degrees", "360 degrees", "270 degrees", "90 degrees" ]
+            }
+        ]
+    })";
+
+    NightManager manager;
+
+    int loadedCount = NightTriviaAPIClient::loadTriviaFromJSON(manager, response);
+
+    CHECK(loadedCount == 2);
+    CHECK(manager.getSize() == 2);
+    CHECK(manager.getLocationMapSize() == 2);
+
+    std::ostringstream oss;
+    manager.printAll(oss);
+
+    std::string out = oss.str();
+
+    CHECK(out.find("programming") != std::string::npos);
+    CHECK(out.find("math") != std::string::npos);
+    CHECK(out.find("What is the output") != std::string::npos);
+    CHECK(out.find("What is the sum of angles") != std::string::npos);
+    CHECK(out.find("Answer: 5") != std::string::npos);
+    CHECK(out.find("Answer: 180 degrees") != std::string::npos);
+    CHECK(out.find("Object count: 4") != std::string::npos);
+}
+
+TEST_CASE("NightTriviaAPIClient returns -1 when GET JSON is malformed")
+{
+    std::string badResponse = R"({
+        "count": 1,
+        "questions": [
+            {
+                "id": 4,
+                "category": "programming",
+                "difficulty": "medium",
+                "question": "Broken JSON",
+                "answer": "5",
+                "choices": [ "6", "Undefined", "5", "4" ]
+            },
+    })";
+
+    NightManager manager;
+
+    int loadedCount = NightTriviaAPIClient::loadTriviaFromJSON(manager, badResponse);
+
+    CHECK(loadedCount == -1);
+    CHECK(manager.getSize() == 0);
+    CHECK(manager.getLocationMapSize() == 0);
+}
+
+TEST_CASE("NightTriviaAPIClient returns -1 when GET JSON has missing fields")
+{
+    std::string badResponse = R"({
+        "count": 1,
+        "questions": [
+            {
+                "id": 4,
+                "category": "programming",
+                "difficulty": "medium",
+                "question": "This object is missing answer and choices"
+            }
+        ]
+    })";
+
+    NightManager manager;
+
+    int loadedCount = NightTriviaAPIClient::loadTriviaFromJSON(manager, badResponse);
+
+    CHECK(loadedCount == -1);
+    CHECK(manager.getSize() == 0);
+    CHECK(manager.getLocationMapSize() == 0);
+}
+
+TEST_CASE("NightTriviaAPIClient parses successful POST response and returns assigned ID")
+{
+    std::string response = R"({
+        "message": "question added successfully",
+        "question": {
+            "id": 30,
+            "category": "science",
+            "difficulty": "easy",
+            "question": "What is the powerhouse of the cell?",
+            "answer": "Mitochondria",
+            "choices": [ "Mitochondria", "Nucleus", "Ribosome", "Golgi apparatus" ]
+        }
+    })";
+
+    std::ostringstream oss;
+
+    int id = NightTriviaAPIClient::parsePOSTResponse(response, oss);
+
+    CHECK(id == 30);
+    CHECK(oss.str().find("Assigned ID: 30") != std::string::npos);
+}
+
+TEST_CASE("NightTriviaAPIClient parses POST error response")
+{
+    std::string response = R"({
+        "error": "answer does not match any entry in choices"
+    })";
+
+    std::ostringstream oss;
+
+    int id = NightTriviaAPIClient::parsePOSTResponse(response, oss);
+
+    CHECK(id == -1);
+    CHECK(oss.str().find("Trivia POST error") != std::string::npos);
+    CHECK(oss.str().find("answer does not match") != std::string::npos);
+}
+
+TEST_CASE("NightTriviaAPIClient returns -1 when POST response is malformed")
+{
+    std::string badResponse = R"({
+        "message": "question added successfully",
+        "question": {
+            "id": 30,
+    })";
+
+    std::ostringstream oss;
+
+    int id = NightTriviaAPIClient::parsePOSTResponse(badResponse, oss);
+
+    CHECK(id == -1);
+    CHECK(oss.str().find("Could not parse trivia POST response") != std::string::npos);
 }
